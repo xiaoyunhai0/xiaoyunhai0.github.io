@@ -1,0 +1,22 @@
+/* 让本地搜索弹窗总是居中悬浮，避免被挤到底部 */
+#local-search,
+.local-search,
+.search-popup,
+.search-dialog {
+    position: fixed !important;
+    inset: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 9999 !important;
+}
+
+#local-search .search-dialog,
+.search-popup .search-dialog {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+}
