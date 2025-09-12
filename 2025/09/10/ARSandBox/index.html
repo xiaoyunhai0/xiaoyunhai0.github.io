@@ -1,0 +1,536 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>霄云海的博客 | 霄云海的博客</title><meta name="author" content="xiaoyunhai"><meta name="copyright" content="xiaoyunhai"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="霄云海的博客"><meta name="application-name" content="霄云海的博客"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="霄云海的博客"><meta property="og:url" content="https://xiaoyunhai0.github.io/2025/09/10/ARSandBox/index.html"><meta property="og:site_name" content="霄云海的博客"><meta property="og:description" content="---  title: AR Sandbox Projection · 工程复盘（独立开发） date: 2025-08-20 10:00:00 updated: 2025-08-20 10:00:00 categories:  - 文章 - 项目复盘 - Unity tags: - Orbbec"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://xiaoyunhai0.github.io/img/low_avatar.png"><meta property="article:author" content="xiaoyunhai"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://xiaoyunhai0.github.io/img/low_avatar.png"><meta name="description" content="---  title: AR Sandbox Projection · 工程复盘（独立开发） date: 2025-08-20 10:00:00 updated: 2025-08-20 10:00:00 categories:  - 文章 - 项目复盘 - Unity tags: - Orbbec"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://xiaoyunhai0.github.io/2025/09/10/ARSandBox/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2024/07/27/125766904/ba62475f396df9de3316a08ed9e65d86_5680958632268053399..png"},
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: xiaoyunhai","link":"链接: ","source":"来源: 霄云海的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: '霄云海的博客',
+  title: '霄云海的博客',
+  postAI: '',
+  pageFillDescription: '工程复盘独立开发文章项目复盘非游戏类沙盘投影系统的完整实现从深度采集网格重建校准多显示投影主题天气生态分布与交互全文含关键源码片段与可复用系统采用与深度相机包含深度网格标定投影联动参数中台生态分布与交互稳定性工程化等完整链路开发需求文档与思维导图产品相关展示运行环境引擎建议内置或均可硬件深度彩色依赖参数持久化使用部署双显示器主屏控制副屏投影项目目标与成果将深度数据实时重建为网格实现物理等比与投影对齐通过双窗口联动完成区域标定与像素级裁剪构建参数中台统一水陆阈值等高线主题天气生态显示共享同一世界解释提供副屏投影模板正交相机动态自适应与一站式标定接口叠加轻量生态系统鱼鸟走兽鲨宝箱捕鱼模式表现可控耦合低关键参数全链路持久化按快速布展与复现系统结构深度彩色帧深度网格等比拉平矫正落盘投影相机一站式标定双窗口角点联动彩色裁剪滤波切换联动自适应参数中台主题天气与光照雾效联动生态目录核心脚本关键模块与源码深度网格与物理对齐职责深度帧三角网顶点等比围栏拉平全局偏移旋转基准抬升参数持久化要点边界采样平面拟合落盘网格参数落盘恢复偏移偏移全局抬升绕微调围栏拉平边界采样平面拟合内部触发采集四周边界点剔除异常值收集边界点到最小二乘拟合平面旋转矫正基准抬升对外接口投影与多显示模板职责集中暴露相机几何参数正交相机副屏输出自适应仅在尺寸变化时重建标定入口物理宽物理深全局抬升旋一键拉平按需重建并同步相机宽高比防止拉伸双窗口联动与彩色裁剪职责两窗口角点拖拽双向同步彩色帧像素级裁剪角点落盘恢复局部相机随自动对齐角点落盘与延迟恢复强制激活确保完成布局等一帧等待布局稳定同步相机与裁剪角点拖拽与双向同步双向同步像素级裁剪输出滤波快切参数中台与分层阈值职责统一封装地形火山雪等高线语义化接口双向绑定与边界有序约束阈值驱动生态与显示地形分层等高线滑条输入框双向绑定边界有序约束生态分布与行为等职责按阈值与网格生成点集行为巡航带最小位移最大距离与越界预测快捷键批量控制水地空点集下发水面高度与点集目标选择去抖限距越界预测阈值触发显隐提升到可见高度自动隐藏主题天气与地图切换天气地图关闭上一个天气启用当前粒子叠加材质调整主光强与雾效保证视觉一致标定与演示分层优先在设置面板调先稳定水面阈值地表层级校准两窗口四角拖拽双向同步自动落盘彩色帧按像素级裁剪姿态尺寸用一站式接口调整偏移旋转等比尺寸与投影相机围栏歪斜用一键拉平主题天气切换与光照雾效联动生态互动刷鱼鸟走兽刷新全部清空捕鱼模式调试显宝箱持久化参数统一落盘二次启动即用快捷键速查功能快捷键滤波快切鱼鸟走兽刷新全部刷新清空鲨鱼刷新清空捕鱼模式天气雨雪晴火山地图切换宝箱显现调试稳定性与工程化按需分配纹理尺寸变更才重建实例池按目标数增删减少越界与抖动最小位移最大距离下一帧越界预测不合法即重选约束防事件回环保证边界有序日志可观测聚焦刷新清空强制动作发布构建统一降级日志级别异常防护空引用尺寸越界出界均有与判空避免运行期崩溃独立负责与落地产出深度网格实时重建等比标定围栏拉平全局矫正参数持久化投影多显示正交相机模板动态自适应一站式标定接口系统双窗口角点联动像素级裁剪延迟恢复与落盘中台分层阈值与等高线火山雪等主题的语义化接口生态互动阈值驱动的水地空区域分布与行为鱼鸟走兽鲨宝箱捕鱼与文档现场标定流程快捷键体系排障要点常见问题快速排查初次进入错位先激活校准面板并等一帧再恢复角点必要时调用投影画面拉伸糊确认正在按像素尺寸重建并同步分层边界打架以保证回写材质前鱼鲨卡位或越界增大收紧确保越界预测生效二次启动丢参数检查是否调用键名是否一致必要时清理后重新保存',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2025-09-12 15:42:24',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="/img/low_avatar.png"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><div class="back-home-button"><i class="anzhiyufont anzhiyu-icon-grip-vertical"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">博客</div><div class="back-menu-list"><a class="back-menu-item" href="https://xiaoyunhai0.github.io/" title="我的博客"><img class="back-menu-item-icon" src="/img/low_avatar.png" alt="我的博客"/><span class="back-menu-item-text">我的博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">个人导航</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://xiaoyunhai0.qzz.io/" title="导航站"><img class="back-menu-item-icon" src="/img/navigation.png" alt="导航站"/><span class="back-menu-item-text">导航站</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">域名邮箱</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://202221.xyz/" title="邮箱入口"><img class="back-menu-item-icon" src="/img/email.png" alt="邮箱入口"/><span class="back-menu-item-text">邮箱入口</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">GitHub</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://github.com/xiaoyunhai0" title="xiaoyunhai0"><img class="back-menu-item-icon" src="/img/github.png" alt="xiaoyunhai0"/><span class="back-menu-item-text">xiaoyunhai0</span></a></div></div></div></div><a id="site-name" href="/" accesskey="h"><div class="title">霄云海的博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"></div><div id="nav-right"><div class="nav-button only-home" id="travellings_button" title="随机前往一个开往项目网站"><a class="site-page" onclick="anzhiyu.totraveling()" title="随机前往一个开往项目网站" href="javascript:void(0);" rel="external nofollow" data-pjax-state="external"><i class="anzhiyufont anzhiyu-icon-train"></i></a></div><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="/img/QRcode/wxplus.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="/img/QRcode/wxplus.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/QRcode/zfbplus.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="/img/QRcode/zfbplus.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Addressables/" style="font-size: 1.05rem;">Addressables<sup>1</sup></a><a href="/tags/DOTween/" style="font-size: 1.05rem;">DOTween<sup>1</sup></a><a href="/tags/Endless-Runner/" style="font-size: 1.05rem;">Endless Runner<sup>1</sup></a><a href="/tags/GitHub/" style="font-size: 1.05rem;">GitHub<sup>1</sup></a><a href="/tags/Hexo/" style="font-size: 1.05rem;">Hexo<sup>1</sup></a><a href="/tags/IL2CPP/" style="font-size: 1.05rem;">IL2CPP<sup>1</sup></a><a href="/tags/Lua/" style="font-size: 1.05rem;">Lua<sup>1</sup></a><a href="/tags/Object-Pool/" style="font-size: 1.05rem;">Object Pool<sup>1</sup></a><a href="/tags/Perlin-Noise/" style="font-size: 1.05rem;">Perlin Noise<sup>1</sup></a><a href="/tags/Procedural-Generation/" style="font-size: 1.05rem;">Procedural Generation<sup>1</sup></a><a href="/tags/SSH/" style="font-size: 1.05rem;">SSH<sup>1</sup></a><a href="/tags/TMP/" style="font-size: 1.05rem;">TMP<sup>1</sup></a><a href="/tags/Unity/" style="font-size: 1.05rem;">Unity<sup>1</sup></a><a href="/tags/WheelCollider/" style="font-size: 1.05rem;">WheelCollider<sup>1</sup></a><a href="/tags/Windows/" style="font-size: 1.05rem;">Windows<sup>1</sup></a><a href="/tags/xLua/" style="font-size: 1.05rem;">xLua<sup>2</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/" style="font-size: 1.05rem;">写作<sup>1</sup></a><a href="/tags/%E5%8D%8F%E7%A8%8B%E5%88%86%E5%B8%A7/" style="font-size: 1.05rem;">协程分帧<sup>1</sup></a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/" style="font-size: 1.05rem;">热更新<sup>1</sup></a><a href="/tags/%E8%AF%AD%E6%B3%95/" style="font-size: 1.05rem;">语法<sup>1</sup></a><a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 1.05rem;">部署<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/09/"><span class="card-archive-list-date">九月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/08/"><span class="card-archive-list-date">八月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/07/"><span class="card-archive-list-date">七月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="article-meta tags"></span></div></div><h1 class="post-title" itemprop="name headline">无题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-09-10T01:57:44.974Z" title="发表于 2025-09-10 09:57:44">2025-09-10</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-09-12T07:42:24.480Z" title="更新于 2025-09-12 15:42:24">2025-09-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为南京"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>南京</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src=""></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://xiaoyunhai0.github.io/2025/09/10/ARSandBox/"><header><h1 id="CrawlerTitle" itemprop="name headline">无题</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">xiaoyunhai</span><time itemprop="dateCreated datePublished" datetime="2025-09-10T01:57:44.974Z" title="发表于 2025-09-10 09:57:44">2025-09-10</time><time itemprop="dateCreated datePublished" datetime="2025-09-12T07:42:24.480Z" title="更新于 2025-09-12 15:42:24">2025-09-12</time></header><pre><code>---
+
+title: AR Sandbox Projection · 工程复盘（独立开发）
+date: 2025-08-20 10:00:00
+updated: 2025-08-20 10:00:00
+categories:
+
+- 文章
+- 项目复盘
+- Unity
+tags:
+- Orbbec Astra
+- Depth-to-Mesh
+- ROI Calibration
+- Multi-Display Projection
+- Shader Parameter Hub
+- Real-time Agents
+cover: /img/article/8.png
+comments: true
+toc: true
+toc\_number: true
+aside: true
+description: 非游戏类 AR 沙盘投影系统的完整实现：从深度采集→网格重建→ROI 校准→多显示投影→主题/天气→生态分布与交互。全文含关键源码片段与可复用 SOP。
+background: &quot;#ffffff&quot;
+
+---
+
+&gt; 系统采用 Unity（C#）与 Orbbec/Astra 深度相机，包含深度→网格、标定/投影、ROI 联动、Shader 参数中台、生态分布与交互、稳定性工程化等完整链路。
+开发需求文档与思维导图：Sandbox: https://www.mubu.com/doc/EP5Q5NheCX
+产品相关展示：https://github.com/xiaoyunhai0/ARSandBox
+
+&lt;!-- more --&gt;
+
+## 0) 运行环境
+
+* **引擎**：Unity（建议 2021+，内置或 URP 均可）
+* **硬件**：Orbbec/Astra（深度 + 彩色）
+* **UI/依赖**：UGUI + TextMeshPro；参数持久化使用 `PlayerPrefs`
+* **部署**：Windows x64，双显示器（主屏控制 + 副屏投影）
+
+---
+
+## 1) 项目目标与成果
+
+* 将 Astra 深度数据**实时**重建为 Unity 网格（Mesh），实现**物理等比**与**投影对齐**。
+* 通过 **ROI 双窗口联动**（Mesh/Color）完成区域标定与**像素级裁剪**。
+* 构建 **Shader 参数中台**，统一水陆阈值、等高线、主题/天气；生态/显示共享同一“世界解释”。
+* 提供 **副屏投影模板**（正交相机 + 动态 RenderTexture 自适应）与**一站式标定接口**。
+* 叠加 **轻量生态系统**（鱼/鸟/走兽/鲨/宝箱 + 捕鱼模式），表现可控、耦合低。
+* 关键参数**全链路持久化**，按 SOP 快速布展与复现。
+
+---
+
+## 2) 系统结构
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Astra 深度/彩色帧</span><br><span class="line">└─ AstraMeshController（深度→网格；等比/拉平/矫正/落盘）</span><br><span class="line">    ├─ ProjectionCalibrationController（Mesh/投影相机 一站式标定）</span><br><span class="line">    ├─ ROIManager + ROICornerDragger（ROI 双窗口角点联动）</span><br><span class="line">    ├─ AstraDisplayUI（彩色裁剪、滤波切换、UI 联动）</span><br><span class="line">    ├─ DynamicRT（RawImage ↔ RenderTexture 自适应）</span><br><span class="line">    ├─ MaterialParamManager + SandboxSettingsUI（Shader 参数中台）</span><br><span class="line">    ├─ WeatherManager（主题/天气与光照/雾效联动）</span><br><span class="line">    └─ ModelSpawnerManager + Fish/Bird/Beast/Shark/Treasure/Fishing（生态）</span><br></pre></td></tr></table></figure>
+
+---
+
+## 3) 目录（核心脚本）
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">AstraMeshController.cs</span><br><span class="line">ProjectionCalibrationController.cs</span><br><span class="line">DynamicRT.cs</span><br><span class="line">ROIManager.cs</span><br><span class="line">ROICornerDragger.cs</span><br><span class="line">AstraDisplayUI.cs</span><br><span class="line">MaterialParamManager.cs</span><br><span class="line">SandboxSettingsUI.cs</span><br><span class="line">WeatherManager.cs</span><br><span class="line">ModelSpawnerManager.cs</span><br><span class="line">FishController.cs</span><br><span class="line">BirdController.cs</span><br><span class="line">BeastController.cs</span><br><span class="line">SharkSpawner.cs</span><br><span class="line">SharkController.cs</span><br><span class="line">SharkSettingsUI.cs</span><br><span class="line">TreasureChestController.cs</span><br><span class="line">FishingManager.cs</span><br></pre></td></tr></table></figure>
+
+---
+
+## 4) 关键模块与源码
+
+### 4.1 深度→网格与物理对齐（`AstraMeshController.cs`）
+
+**职责**：深度帧→三角网/UV/顶点；1:1 等比；围栏拉平；全局偏移/旋转/基准抬升；参数持久化。
+
+**要点**：`xyScale/zScale` + `useRealWorldSize/realWorldSize`；边界采样 + 平面拟合；`PlayerPrefs` 落盘。
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">region</span> Mesh Params Save/Load（网格参数落盘/恢复）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SaveMeshParamsToPrefs</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    PlayerPrefs.SetFloat(<span class="string">&quot;Mesh_HorizontalOffset&quot;</span>, positionOffset.x); <span class="comment">// XZ 偏移-X</span></span><br><span class="line">    PlayerPrefs.SetFloat(<span class="string">&quot;Mesh_VerticalOffset&quot;</span>,   positionOffset.z); <span class="comment">// XZ 偏移-Z</span></span><br><span class="line">    PlayerPrefs.SetFloat(<span class="string">&quot;Mesh_BaseOffset&quot;</span>,       baseOffset);       <span class="comment">// 全局抬升-Y</span></span><br><span class="line">    PlayerPrefs.SetFloat(<span class="string">&quot;Mesh_RotationY&quot;</span>,        rotationOffset.y); <span class="comment">// 绕 Y 微调</span></span><br><span class="line">    PlayerPrefs.Save();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LoadMeshParamsFromPrefs</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    positionOffset.x = PlayerPrefs.GetFloat(<span class="string">&quot;Mesh_HorizontalOffset&quot;</span>, <span class="number">0f</span>);</span><br><span class="line">    positionOffset.z = PlayerPrefs.GetFloat(<span class="string">&quot;Mesh_VerticalOffset&quot;</span>,   <span class="number">0f</span>);</span><br><span class="line">    baseOffset       = PlayerPrefs.GetFloat(<span class="string">&quot;Mesh_BaseOffset&quot;</span>,       <span class="number">0f</span>);</span><br><span class="line">    rotationOffset.y = PlayerPrefs.GetFloat(<span class="string">&quot;Mesh_RotationY&quot;</span>,        <span class="number">0f</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> Fence Level（围栏拉平：边界采样 + 平面拟合）</span></span><br><span class="line">[<span class="meta">ContextMenu(<span class="string">&quot;Fence Level Now&quot;</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">FenceLevelCorrectionRequest</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    fenceLevelCorrectionRequested = <span class="literal">false</span>;</span><br><span class="line">    UpdateMeshVertices(); <span class="comment">// 内部触发 FenceLevelCorrect(originalVertices)</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">FenceLevelCorrect</span>(<span class="params">Vector3[] verts</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> borderPoints = <span class="keyword">new</span> List&lt;Vector3&gt;(); <span class="comment">// 1) 采集四周边界点（剔除异常值）</span></span><br><span class="line">    <span class="comment">// ... 收集边界点到 borderPoints</span></span><br><span class="line">    Plane plane = FitPlaneToPoints(borderPoints); <span class="comment">// 2) 最小二乘拟合平面</span></span><br><span class="line">    Quaternion deltaRot = Quaternion.FromToRotation(transform.up, plane.normal); <span class="comment">// 3) 旋转矫正</span></span><br><span class="line">    transform.rotation = deltaRot * transform.rotation;</span><br><span class="line">    transform.position += <span class="keyword">new</span> Vector3(<span class="number">0f</span>, baseOffset, <span class="number">0f</span>); <span class="comment">// 4) 基准抬升</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> Public Access（对外接口）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Vector3[] <span class="title">GetMeshVertices</span>()</span> =&gt; originalVertices;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span>   <span class="title">SetRotationOffsetY</span>(<span class="params"><span class="built_in">float</span> ry</span>)</span> =&gt; rotationOffset.y = ry;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">float</span>  <span class="title">GetRotationOffsetY</span>()</span> =&gt; rotationOffset.y;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+---
+
+### 4.2 投影与多显示模板（`ProjectionCalibrationController.cs`、`DynamicRT.cs`）
+
+**职责**：集中暴露 Mesh/相机几何参数；正交相机副屏输出；RawImage→RT 自适应，仅在尺寸变化时重建。
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ProjectionCalibrationController.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> One-Stop Calibration（标定入口）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetMeshScaleX</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; meshCtrl.realWorldSize.x = v;   <span class="comment">// 物理宽</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetMeshScaleZ</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; meshCtrl.realWorldSize.y = v;   <span class="comment">// 物理深</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetMeshBaseOffset</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; meshCtrl.SetBaseOffset(v);  <span class="comment">// 全局抬升</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetMeshRotY</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; meshCtrl.SetRotationOffsetY(v);   <span class="comment">// Y 旋</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetCameraX</span>(<span class="params"><span class="built_in">float</span> v</span>)</span>&#123; <span class="keyword">var</span> p=projectorCamera.transform.position; p.x=v; projectorCamera.transform.position=p; &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetCameraY</span>(<span class="params"><span class="built_in">float</span> v</span>)</span>&#123; <span class="keyword">var</span> p=projectorCamera.transform.position; p.y=v; projectorCamera.transform.position=p; &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetCameraZ</span>(<span class="params"><span class="built_in">float</span> v</span>)</span>&#123; <span class="keyword">var</span> p=projectorCamera.transform.position; p.z=v; projectorCamera.transform.position=p; &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetCameraOrthoSize</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; projectorCamera.orthographicSize = v;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">MeshFenceLevel</span>()</span> =&gt; meshCtrl.FenceLevelCorrectionRequest(); <span class="comment">// 一键拉平</span></span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DynamicRT.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> DynamicRT（按需重建 RT 并同步相机宽高比）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span> =&gt; UpdateRenderTexture();</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">UpdateRenderTexture</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> rect = rawImage.rectTransform.rect;</span><br><span class="line">    <span class="built_in">int</span> w = Mathf.Max(<span class="number">1</span>, Mathf.RoundToInt(rect.width));</span><br><span class="line">    <span class="built_in">int</span> h = Mathf.Max(<span class="number">1</span>, Mathf.RoundToInt(rect.height));</span><br><span class="line">    <span class="keyword">if</span> (rt == <span class="literal">null</span> || rt.width != w || rt.height != h)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (rt != <span class="literal">null</span>) rt.Release();</span><br><span class="line">        rt = <span class="keyword">new</span> RenderTexture(w, h, <span class="number">16</span>);</span><br><span class="line">        renderCam.targetTexture = rt;</span><br><span class="line">        rawImage.texture = rt;</span><br><span class="line">        renderCam.aspect = (<span class="built_in">float</span>)w / h; <span class="comment">// 防止拉伸</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+---
+
+### 4.3 ROI 双窗口联动与彩色裁剪（`ROIManager.cs`、`ROICornerDragger.cs`、`AstraDisplayUI.cs`）
+
+**职责**：Mesh/Color 两窗口角点拖拽**双向同步**；彩色帧**像素级裁剪**；角点/ROI **落盘恢复**；局部相机随 ROI **自动对齐**。
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ROIManager.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> ROI Save/Load（角点落盘与延迟恢复）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SaveROIToPrefs</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> pos = roiCornersMesh[i].anchoredPosition;</span><br><span class="line">        PlayerPrefs.SetFloat(<span class="string">$&quot;ROI_Corner_<span class="subst">&#123;i&#125;</span>_X&quot;</span>, pos.x);</span><br><span class="line">        PlayerPrefs.SetFloat(<span class="string">$&quot;ROI_Corner_<span class="subst">&#123;i&#125;</span>_Y&quot;</span>, pos.y);</span><br><span class="line">    &#125;</span><br><span class="line">    PlayerPrefs.Save();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">IEnumerator <span class="title">DelayLoadROI</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">bool</span> wasActive = calibrationPanel.activeSelf;</span><br><span class="line">    calibrationPanel.SetActive(<span class="literal">true</span>);   <span class="comment">// 强制激活，确保 Canvas 完成布局</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="keyword">return</span> <span class="literal">null</span>;                  <span class="comment">// 等一帧，等待布局稳定</span></span><br><span class="line">    LoadROIFromPrefs();</span><br><span class="line">    UpdateAll();                        <span class="comment">// 同步 ROI、相机与裁剪</span></span><br><span class="line">    calibrationPanel.SetActive(wasActive);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ROICornerDragger.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> Corner Drag（角点拖拽与双向同步）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnBeginDrag</span>(<span class="params">PointerEventData e</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    RectTransformUtility.ScreenPointToLocalPointInRectangle(</span><br><span class="line">        parentRawImageRect, e.position, e.pressEventCamera, <span class="keyword">out</span> startLocal);</span><br><span class="line">    startOffset = (Vector2)transform.localPosition - startLocal;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnDrag</span>(<span class="params">PointerEventData e</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    RectTransformUtility.ScreenPointToLocalPointInRectangle(</span><br><span class="line">        parentRawImageRect, e.position, e.pressEventCamera, <span class="keyword">out</span> Vector2 local);</span><br><span class="line">    Vector2 newPos = local + startOffset;</span><br><span class="line">    <span class="keyword">var</span> r = parentRawImageRect.rect;</span><br><span class="line">    newPos.x = Mathf.Clamp(newPos.x, r.xMin, r.xMax);</span><br><span class="line">    newPos.y = Mathf.Clamp(newPos.y, r.yMin, r.yMax);</span><br><span class="line">    ((RectTransform)transform).anchoredPosition = newPos;</span><br><span class="line">    roiManager.OnCornerMoved(cornerIndex, belongsToMeshWindow: <span class="literal">true</span>); <span class="comment">// 双向同步</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// AstraDisplayUI.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> ROI Crop（像素级裁剪输出）</span></span><br><span class="line"><span class="keyword">private</span> Texture2D _roiTex;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CropAndShowROI</span>(<span class="params">Texture2D src, RectInt roi</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    roi.x = Mathf.Clamp(roi.x, <span class="number">0</span>, Mathf.Max(<span class="number">0</span>, src.width  - <span class="number">1</span>));</span><br><span class="line">    roi.y = Mathf.Clamp(roi.y, <span class="number">0</span>, Mathf.Max(<span class="number">0</span>, src.height - <span class="number">1</span>));</span><br><span class="line">    roi.width  = Mathf.Clamp(roi.width,  <span class="number">1</span>, src.width  - roi.x);</span><br><span class="line">    roi.height = Mathf.Clamp(roi.height, <span class="number">1</span>, src.height - roi.y);</span><br><span class="line">    <span class="keyword">var</span> pixels = src.GetPixels(roi.x, roi.y, roi.width, roi.height);</span><br><span class="line">    <span class="keyword">if</span> (_roiTex == <span class="literal">null</span> || _roiTex.width != roi.width || _roiTex.height != roi.height)</span><br><span class="line">        _roiTex = <span class="keyword">new</span> Texture2D(roi.width, roi.height, TextureFormat.RGBA32, <span class="literal">false</span>);</span><br><span class="line">    _roiTex.SetPixels(pixels);</span><br><span class="line">    _roiTex.Apply(<span class="literal">false</span>, <span class="literal">false</span>);</span><br><span class="line">    roiPreviewRawImage.texture = _roiTex;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> UI Shortcut（滤波 σ 快切）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (Input.GetKeyDown(KeyCode.Alpha5))</span><br><span class="line">        ToggleGaussianSigma();</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+---
+
+### 4.4 Shader 参数中台与分层阈值（`MaterialParamManager.cs`、`SandboxSettingsUI.cs`）
+
+**职责**：统一封装地形/火山/雪/等高线；语义化接口；UI 双向绑定与边界有序约束；阈值驱动生态与显示。
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MaterialParamManager.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> Terrain Params（地形分层/等高线）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetTerrainBorder0</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; SetFloat(<span class="string">&quot;terrain&quot;</span>, <span class="string">&quot;_Border0&quot;</span>, v);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetTerrainBorder1</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; SetFloat(<span class="string">&quot;terrain&quot;</span>, <span class="string">&quot;_Border1&quot;</span>, v);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetTerrainBorder2</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; SetFloat(<span class="string">&quot;terrain&quot;</span>, <span class="string">&quot;_Border2&quot;</span>, v);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetTerrainBlendRange</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; SetFloat(<span class="string">&quot;terrain&quot;</span>, <span class="string">&quot;_BlendRange&quot;</span>, v);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetContourSpacing</span>(<span class="params"><span class="built_in">float</span> v</span>)</span> =&gt; SetFloat(<span class="string">&quot;terrain&quot;</span>, <span class="string">&quot;_ContourSpacing&quot;</span>, v);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetContourSmoothness</span>(<span class="params"><span class="built_in">float</span> v</span>)</span>=&gt; SetFloat(<span class="string">&quot;terrain&quot;</span>, <span class="string">&quot;_ContourSmoothness&quot;</span>, v);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetContourColor</span>(<span class="params">Color c</span>)</span>     =&gt; SetColor(<span class="string">&quot;terrain&quot;</span>, <span class="string">&quot;_ContourColor&quot;</span>, c);</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">readonly</span> Dictionary&lt;<span class="built_in">string</span>, Material&gt; matDict = <span class="keyword">new</span>();</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">SetFloat</span>(<span class="params"><span class="built_in">string</span> name, <span class="built_in">string</span> prop, <span class="built_in">float</span> <span class="keyword">value</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (matDict.TryGetValue(name, <span class="keyword">out</span> <span class="keyword">var</span> m) &amp;&amp; m.HasProperty(prop))</span><br><span class="line">        m.SetFloat(prop, <span class="keyword">value</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">SetColor</span>(<span class="params"><span class="built_in">string</span> name, <span class="built_in">string</span> prop, Color <span class="keyword">value</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (matDict.TryGetValue(name, <span class="keyword">out</span> <span class="keyword">var</span> m) &amp;&amp; m.HasProperty(prop))</span><br><span class="line">        m.SetColor(prop, <span class="keyword">value</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SandboxSettingsUI.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> UI Binding（滑条/输入框双向绑定 + 边界有序约束）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InitSliderAndInput</span>(<span class="params">Slider s, TMP_InputField i, <span class="built_in">float</span> min, <span class="built_in">float</span> max, <span class="built_in">float</span> def, Action&lt;<span class="built_in">float</span>&gt; onChanged</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    s.minValue = min; s.maxValue = max; s.SetValueWithoutNotify(def);</span><br><span class="line">    i.text = def.ToString(<span class="string">&quot;F2&quot;</span>);</span><br><span class="line">    s.onValueChanged.AddListener(v =&gt; &#123; i.SetTextWithoutNotify(v.ToString(<span class="string">&quot;F2&quot;</span>)); onChanged(v); Save(); &#125;);</span><br><span class="line">    i.onEndEdit.AddListener(t =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">float</span>.TryParse(t, <span class="keyword">out</span> <span class="keyword">var</span> v)) &#123; v = Mathf.Clamp(v, min, max); s.SetValueWithoutNotify(v); onChanged(v); Save(); &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">EnforceBordersOrder</span>() <span class="comment">// Border0 &lt; Border1 &lt; Border2</span></span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> b0 = GetSlider(terrainBorder0Slider);</span><br><span class="line">    <span class="built_in">float</span> b1 = Mathf.Max(b0 + <span class="number">0.01f</span>, GetSlider(terrainBorder1Slider));</span><br><span class="line">    <span class="built_in">float</span> b2 = Mathf.Max(b1 + <span class="number">0.01f</span>, GetSlider(terrainBorder2Slider));</span><br><span class="line">    terrainBorder1Slider.SetValueWithoutNotify(b1);</span><br><span class="line">    terrainBorder2Slider.SetValueWithoutNotify(b2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+---
+
+### 4.5 生态分布与行为（`ModelSpawnerManager.cs`、`SharkSpawner.cs`、`SharkController.cs` 等）
+
+**职责**：按阈值与网格生成 `water/ground/fly` 点集；行为巡航带**最小位移/最大距离**与**越界预测**；UI/快捷键批量控制。
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ModelSpawnerManager.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> Points Generation（水/地/空点集）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">RefreshAllModelPoints</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!IsMeshReady()) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">var</span> mat = matMgr.terrainMaterial;</span><br><span class="line">    <span class="built_in">float</span> b0 = mat.GetFloat(<span class="string">&quot;_Border0&quot;</span>);</span><br><span class="line">    <span class="built_in">float</span> b2 = mat.GetFloat(<span class="string">&quot;_Border2&quot;</span>);</span><br><span class="line">    <span class="built_in">float</span> blend = mat.GetFloat(<span class="string">&quot;_BlendRange&quot;</span>);</span><br><span class="line">    <span class="built_in">float</span> waterThreshold = b2 - blend;</span><br><span class="line">    <span class="keyword">var</span> verts = meshCtrl.GetMeshVertices();</span><br><span class="line">    waterPoints  = verts.Where(v =&gt; v.y &gt;= waterThreshold).ToList();</span><br><span class="line">    groundPoints = verts.Where(v =&gt; v.y &gt; b0 &amp;&amp; v.y &lt; b2).ToList();</span><br><span class="line">    flyPoints    = verts.ToList();</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SharkSpawner.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> Shark Sync（下发水面高度与点集）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">float</span> b2 = matParamMgr.terrainMaterial.GetFloat(<span class="string">&quot;_Border2&quot;</span>);</span><br><span class="line">    <span class="built_in">float</span> blend = matParamMgr.terrainMaterial.GetFloat(<span class="string">&quot;_BlendRange&quot;</span>);</span><br><span class="line">    SharkController.GlobalWaterBorder = b2 - blend;</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="keyword">var</span> s <span class="keyword">in</span> sharks)</span><br><span class="line">        s.GetComponent&lt;SharkController&gt;().waterPoints = waterPoints;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SharkController.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> Shark Target Pick（目标选择：去抖/限距/越界预测）</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PickNewTarget</span>(<span class="params"><span class="built_in">bool</span> isFirst = <span class="literal">false</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (waterPoints == <span class="literal">null</span> || waterPoints.Count == <span class="number">0</span>)</span><br><span class="line">    &#123; targetPos = transform.localPosition; <span class="keyword">return</span>; &#125;</span><br><span class="line">    Vector3 cur = transform.localPosition;</span><br><span class="line">    <span class="built_in">float</span> maxSqr = maxTargetDistance * maxTargetDistance;</span><br><span class="line">    <span class="built_in">float</span> minSqr = minMoveDist * minMoveDist;</span><br><span class="line">    <span class="keyword">var</span> cand = <span class="keyword">new</span> List&lt;Vector3&gt;();</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="keyword">var</span> wp <span class="keyword">in</span> waterPoints)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">float</span> d2 = (<span class="keyword">new</span> Vector3(wp.x, GlobalWaterBorder, wp.z) - cur).sqrMagnitude;</span><br><span class="line">        <span class="keyword">if</span> (d2 &gt; minSqr &amp;&amp; d2 &lt; maxSqr) cand.Add(wp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> pick = cand.Count &gt; <span class="number">0</span> ? cand[Random.Range(<span class="number">0</span>, cand.Count)] : waterPoints[Random.Range(<span class="number">0</span>, waterPoints.Count)];</span><br><span class="line">    targetPos = <span class="keyword">new</span> Vector3(pick.x, GlobalWaterBorder, pick.z);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TreasureChestController.cs</span></span><br><span class="line"><span class="meta">#<span class="keyword">region</span> Chest Appear/Hide（阈值触发显隐）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ShowChest</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (isAppeared) <span class="keyword">return</span>;</span><br><span class="line">    isAppeared = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">var</span> pos = transform.position;</span><br><span class="line">    pos.y = chestShowYOffset; <span class="comment">// 提升到可见高度</span></span><br><span class="line">    transform.position = pos;</span><br><span class="line">    SetChildrenActive(<span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">if</span> (chestAnim) chestAnim.SetTrigger(<span class="string">&quot;Appear&quot;</span>);</span><br><span class="line">    Invoke(<span class="keyword">nameof</span>(HideChest), <span class="number">5f</span>); <span class="comment">// 自动隐藏</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+---
+
+### 4.6 主题/天气与地图切换（`WeatherManager.cs`）
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">region</span> Weather/Map（天气/地图）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DoClear</span>()</span> =&gt; SetWeather(WeatherType.Clear);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DoRain</span>()</span>  =&gt; SetWeather(WeatherType.Rain);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DoSnow</span>()</span>  =&gt; SetWeather(WeatherType.Snow);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ShowMap0</span>()</span> =&gt; SwitchMap(<span class="number">0</span>);</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ShowMap1</span>()</span> =&gt; SwitchMap(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetWeather</span>(<span class="params">WeatherType t</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 关闭上一个天气 → 启用当前（粒子/叠加材质）</span></span><br><span class="line">    <span class="comment">// 调整主光强与雾效，保证视觉一致</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+
+---
+
+## 5) 标定与演示 SOP
+
+1. **分层优先**：在设置面板调 `_Border0/_Border1/_Border2/_BlendRange`，先稳定“水面阈值/地表层级”。
+2. **ROI 校准**：Mesh/Color 两窗口四角拖拽（**双向同步**），自动落盘；彩色帧按 ROI **像素级裁剪**。
+3. **姿态/尺寸**：用一站式接口调整 Mesh 偏移/旋转/等比尺寸与投影相机 `OrthoSize`；围栏歪斜用“一键拉平”。
+4. **主题/天气**：切换 Clear/Rain/Snow/Volcano 与 Map0/Map1（光照/雾效联动）。
+5. **生态/互动**：`F1/F2/F3` 刷鱼/鸟/走兽，`F5` 刷新全部，`F6` 清空；`F8` 捕鱼模式；`F7` 调试显宝箱。
+6. **持久化**：Mesh/ROI/Shader/UI 参数统一 `PlayerPrefs` 落盘，二次启动即用。
+
+---
+
+## 6) 快捷键速查
+
+| 功能                | 快捷键             |
+| ----------------- | --------------- |
+| 滤波 σ 快切           | `5`             |
+| 鱼 / 鸟 / 走兽 刷新     | `F1 / F2 / F3`  |
+| 全部刷新 / 清空         | `F5 / F6`       |
+| 鲨鱼 刷新 / 清空        | `3 / 4`         |
+| 捕鱼模式              | `F8`            |
+| 天气：雨 / 雪 / 晴 / 火山 | `R / S / C / V` |
+| 地图切换              | `1 / 2`         |
+| 宝箱显现（调试）          | `F7`            |
+
+---
+
+## 7) 稳定性与工程化
+
+* **按需分配**：RT/纹理尺寸变更才重建；实例池按目标数增删，减少 `Instantiate/Destroy`。
+* **越界与抖动**：最小位移/最大距离 + 下一帧越界预测，不合法即重选。
+* **UI 约束**：`SetValueWithoutNotify` 防事件回环；`EnforceBordersOrder` 保证边界有序。
+* **日志可观测**：聚焦刷新/清空/强制动作；发布构建统一降级日志级别。
+* **异常防护**：空引用/尺寸越界/ROI 出界均有 Clamp 与判空，避免运行期崩溃。
+
+---
+
+## 8) 独立负责与落地产出（Solo Ownership）
+
+* **深度→网格**：实时重建、等比标定、围栏拉平、全局矫正、参数持久化。
+* **投影/多显示**：正交相机模板、动态 RT 自适应、一站式标定接口。
+* **ROI 系统**：双窗口角点联动、像素级裁剪、延迟恢复与落盘。
+* **Shader 中台**：分层阈值与等高线/火山/雪等主题的语义化接口。
+* **生态/互动**：阈值驱动的水/地/空区域分布与行为（鱼/鸟/走兽/鲨/宝箱/捕鱼）。
+* **SOP 与文档**：现场标定流程、快捷键体系、排障要点。
+
+---
+
+## 9) 常见问题（快速排查）
+
+* **ROI 初次进入错位**：`DelayLoadROI()` 先激活校准面板并等一帧再恢复角点；必要时调用 `Canvas.ForceUpdateCanvases()`。
+* **投影画面拉伸/糊**：确认 `DynamicRT` 正在按 `RawImage` 像素尺寸重建 RT，并同步 `renderCam.aspect`。
+* **分层边界“打架”**：UI 以 `EnforceBordersOrder()` 保证 `Border0 &lt; Border1 &lt; Border2`，回写材质前 Clamp。
+* **鱼/鲨“卡位”或越界**：增大 `minMoveDist`、收紧 `maxTargetDistance`，确保越界预测生效。
+* **二次启动丢参数**：检查 `PlayerPrefs.Save()` 是否调用、键名是否一致；必要时清理后重新保存。
+
+---
+</code></pre>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/low_avatar.png" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/low_avatar.png" title="头像" alt="头像"></a><div class="post-copyright__author_name">xiaoyunhai</div><div class="post-copyright__author_desc">记录·折腾·输出</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://xiaoyunhai0.github.io/2025/09/10/ARSandBox/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://xiaoyunhai0.github.io/2025/09/10/ARSandBox/')">霄云海的博客</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="/img/QRcode/wxplus.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/QRcode/wxplus.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/QRcode/zfbplus.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/QRcode/zfbplus.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://xiaoyunhai0.github.io/2025/09/10/ARSandBox/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=霄云海的博客&amp;url=https://xiaoyunhai0.github.io/2025/09/10/ARSandBox/&amp;pic=" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://xiaoyunhai0.github.io" target="_blank">霄云海的博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"></div></div></div><div class="post_share"><div class="social-share" data-image="/img/low_avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/article/6.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Git Push&amp;Pull 使用 SSH（含 443 端口）配置</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/low_avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">这里是霄云海的个人博客，记录开发与生活。</div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://bu.dusays.com/2023/05/13/645fa415e8694.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/10/ARSandBox/" title="无题">无题</a><time datetime="2025-09-10T01:57:44.974Z" title="发表于 2025-09-10 09:57:44">2025-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/" title="Git Push&amp;Pull 使用 SSH（含 443 端口）配置"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/article/6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git Push&amp;Pull 使用 SSH（含 443 端口）配置"/></a><div class="content"><a class="title" href="/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/" title="Git Push&amp;Pull 使用 SSH（含 443 端口）配置">Git Push&amp;Pull 使用 SSH（含 443 端口）配置</a><time datetime="2025-08-21T16:00:00.000Z" title="发表于 2025-08-22 00:00:00">2025-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/08/08/3DRacing/" title="3DRacing 可复用架构实战：圆柱地形·两片段循环·一键停世界"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/article/5.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="3DRacing 可复用架构实战：圆柱地形·两片段循环·一键停世界"/></a><div class="content"><a class="title" href="/2025/08/08/3DRacing/" title="3DRacing 可复用架构实战：圆柱地形·两片段循环·一键停世界">3DRacing 可复用架构实战：圆柱地形·两片段循环·一键停世界</a><time datetime="2025-08-08T04:00:00.000Z" title="发表于 2025-08-08 12:00:00">2025-08-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/08/07/Flappy-Bird-XLua-Migration/" title="Flappy Bird 可热更化实战：C# → XLua 迁移"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/article/3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flappy Bird 可热更化实战：C# → XLua 迁移"/></a><div class="content"><a class="title" href="/2025/08/07/Flappy-Bird-XLua-Migration/" title="Flappy Bird 可热更化实战：C# → XLua 迁移">Flappy Bird 可热更化实战：C# → XLua 迁移</a><time datetime="2025-08-07T04:00:00.000Z" title="发表于 2025-08-07 12:00:00">2025-08-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/07/22/Lua%20&amp;%20xLua%20%E8%AF%AD%E6%B3%95%E6%95%99%E5%AD%A6%EF%BC%88Unity%E5%90%91%EF%BC%89/" title="Lua &amp; xLua 语法学习（Unity向）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/article/1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Lua &amp; xLua 语法学习（Unity向）"/></a><div class="content"><a class="title" href="/2025/07/22/Lua%20&amp;%20xLua%20%E8%AF%AD%E6%B3%95%E6%95%99%E5%AD%A6%EF%BC%88Unity%E5%90%91%EF%BC%89/" title="Lua &amp; xLua 语法学习（Unity向）">Lua &amp; xLua 语法学习（Unity向）</a><time datetime="2025-07-22T10:30:00.000Z" title="发表于 2025-07-22 18:30:00">2025-07-22</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2024 - 2025 By <a class="footer-bar-link" href="/" title="xiaoyunhai" target="_blank">xiaoyunhai</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">13</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">博客</div><div class="back-menu-list"><a class="back-menu-item" href="https://xiaoyunhai0.github.io/" title="我的博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/low_avatar.png" alt="我的博客"/><span class="back-menu-item-text">我的博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">个人导航</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://xiaoyunhai0.qzz.io/" title="导航站"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/navigation.png" alt="导航站"/><span class="back-menu-item-text">导航站</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">域名邮箱</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://202221.xyz/" title="邮箱入口"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/email.png" alt="邮箱入口"/><span class="back-menu-item-text">邮箱入口</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">GitHub</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://github.com/xiaoyunhai0" title="xiaoyunhai0"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/github.png" alt="xiaoyunhai0"/><span class="back-menu-item-text">xiaoyunhai0</span></a></div></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Addressables/" style="font-size: 0.88rem;">Addressables<sup>1</sup></a><a href="/tags/DOTween/" style="font-size: 0.88rem;">DOTween<sup>1</sup></a><a href="/tags/Endless-Runner/" style="font-size: 0.88rem;">Endless Runner<sup>1</sup></a><a href="/tags/GitHub/" style="font-size: 0.88rem;">GitHub<sup>1</sup></a><a href="/tags/Hexo/" style="font-size: 0.88rem;">Hexo<sup>1</sup></a><a href="/tags/IL2CPP/" style="font-size: 0.88rem;">IL2CPP<sup>1</sup></a><a href="/tags/Lua/" style="font-size: 0.88rem;">Lua<sup>1</sup></a><a href="/tags/Object-Pool/" style="font-size: 0.88rem;">Object Pool<sup>1</sup></a><a href="/tags/Perlin-Noise/" style="font-size: 0.88rem;">Perlin Noise<sup>1</sup></a><a href="/tags/Procedural-Generation/" style="font-size: 0.88rem;">Procedural Generation<sup>1</sup></a><a href="/tags/SSH/" style="font-size: 0.88rem;">SSH<sup>1</sup></a><a href="/tags/TMP/" style="font-size: 0.88rem;">TMP<sup>1</sup></a><a href="/tags/Unity/" style="font-size: 0.88rem;">Unity<sup>1</sup></a><a href="/tags/WheelCollider/" style="font-size: 0.88rem;">WheelCollider<sup>1</sup></a><a href="/tags/Windows/" style="font-size: 0.88rem;">Windows<sup>1</sup></a><a href="/tags/xLua/" style="font-size: 0.88rem;">xLua<sup>2</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/" style="font-size: 0.88rem;">写作<sup>1</sup></a><a href="/tags/%E5%8D%8F%E7%A8%8B%E5%88%86%E5%B8%A7/" style="font-size: 0.88rem;">协程分帧<sup>1</sup></a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/" style="font-size: 0.88rem;">热更新<sup>1</sup></a><a href="/tags/%E8%AF%AD%E6%B3%95/" style="font-size: 0.88rem;">语法<sup>1</sup></a><a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 0.88rem;">部署<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.5"></meting-js></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="is-center" id="loading-database"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-pulse-icon"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("02/22/2024 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2024 By 安知鱼 V1.6.14",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 xiaoyunhai 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
