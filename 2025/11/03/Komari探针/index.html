@@ -1,0 +1,661 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>Komari 探针安装教程（Cloudflare + Nginx） | 霄云海的博客</title><meta name="keywords" content="Komari,探针,Cloudflare,Nginx"><meta name="author" content="xiaoyunhai"><meta name="copyright" content="xiaoyunhai"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="Komari 探针安装教程（Cloudflare + Nginx）"><meta name="application-name" content="Komari 探针安装教程（Cloudflare + Nginx）"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="Komari 探针安装教程（Cloudflare + Nginx）"><meta property="og:url" content="https://xiaoyunhai0.github.io/2025/11/03/Komari%E6%8E%A2%E9%92%88/index.html"><meta property="og:site_name" content="霄云海的博客"><meta property="og:description" content="Cloudflare 代理 + Nginx 反代环境下，部署 Komari 服务端与 Agent 的完整步骤与常见问题排查指引。"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://443222.xyz/file/Blog/article/1762154911642_22.png"><meta property="article:author" content="xiaoyunhai"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://443222.xyz/file/Blog/article/1762154911642_22.png"><meta name="description" content="Cloudflare 代理 + Nginx 反代环境下，部署 Komari 服务端与 Agent 的完整步骤与常见问题排查指引。"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://xiaoyunhai0.github.io/2025/11/03/Komari%E6%8E%A2%E9%92%88/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2024/07/27/125766904/ba62475f396df9de3316a08ed9e65d86_5680958632268053399..png"},
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "custom",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: xiaoyunhai","link":"链接: ","source":"来源: 霄云海的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: '霄云海的博客',
+  title: 'Komari 探针安装教程（Cloudflare + Nginx）',
+  postAI: '',
+  pageFillDescription: '0. 前提与环境, 1. 核对域名解析与服务器 IP, 2. 配置 Nginx 反向代理与 HTTPS, 2.1 新建站点配置, 2.2 清理零宽字符（推荐）, 2.3 测试并重载, 3. 使用 Cloudflare Origin 证书（Full Strict）, 3.1 在 Cloudflare 控制台生成证书, 3.2 上传到服务器并设定权限, 3.3 关联到 Nginx, 3.4 Cloudflare 端设置, 4. 验证服务端与回源, 5. 安装 Komari Agent（探针）, 5.1 推荐：管道安装（避免 sudo 与 lt() 冲突）, 5.2 备选：先保存再执行, 5.3 请勿与 lt() 混用, 6. 验证 Agent 运行状态, 7.（可选）服务端管理与优化, 7.1 重置面板管理员密码, 7.2 统一时区（示例：东京）, 7.3 在 Cloudflare 代理下保留真实客户端 IP（可选）, 8. 常见问题速查, 9. 收尾与快速检查, 附录 A：使用 Let’s Encrypt（acme.sh）签发证书（可选）, 附录 B：部署 Komari 面板的替代方式（按需选择）, 附录 C：在面板创建节点并获取 Agent 命令, 附录 D：界面美化（Mochi 主题示例可选）目标让服务端运行在代理并在服务器上部署上报数据全文逐步解释命令作用保证照做即可完成部署前提与环境系统示例基于域名已托管在橙云代理灰云仅负责反代本机后端服务端监听权限具备权限术语说明服务端面板的控制台已经通过部署探针安装在被监控节点上的客户端通过面板签发的建立连接核对域名解析与服务器作用确认当前解析到的地址启用代理后通常会返回作用查看当前服务器的公网若与上一条不同且为真实地址表示域名已走代理可继续配置证书方案配置反向代理与新建站点配置作用创建或编辑站点配置写入以下内容已适配证书与强制跳转到建议在块开启第节生成的证书反代服务端支持关闭代理缓冲降低延迟如果看到说明应将写成并放在内如上所示清理零宽字符推荐作用备份配置文件作用移除零宽字符避免出现报错作用确认文件已无隐形字符测试并重载作用检测配置语法作用平滑重载让新配置生效使用证书因域名启用代理推荐使用浏览器使用证书源站使用证书需在控制台把模式设为在控制台生成证书进入填写默认即可有效期默认会提供长期证书下载证书与私钥上传到服务器并设定权限作用创建存储证书的目录作用粘贴提供的证书内容以开头作用粘贴私钥内容以开头作用限制证书与私钥权限私钥仅可读关联到第步已写入作用验证配置并重载端设置控制台切换为作用强制校验证书链与域名匹配防止伪造证书导致的安全风险验证服务端与回源作用确认服务端监听作用检查后端接口是否返回状态码你的服务器作用直接连接源站测试是否可用由于证书仅供信任此处使用忽略证书校验属正常安装探针需要的参数面板地址如在面板创建节点后获得的令牌敏感安装后建议轮换推荐管道安装避免与冲突你的静默下载脚本失败时返回非零状态支持重定向将脚本通过管道交给执行表示脚本来自标准输入之后是脚本参数传入面板地址与节点脚本会写入服务并启动备选先保存再执行你的作用若不习惯管道执行可先下载到本地再以运行请勿与混用反例会出现原因依赖临时文件描述符默认会关闭导致脚本无法读取验证运行状态作用查看服务是否作用检查最近日志确认已连接到并开始上报若在面板看到节点在线心跳与信息刷新则安装成功可选服务端管理与优化重置面板管理员密码新密码作用修改管理员密码执行后需重启服务端生效作用重启服务端若运行在可使用容器名统一时区示例东京作用调整系统时区便于日志与排班阅读在代理下保留真实客户端可选在全局或站点中加入作用让应用记录真实访客而非节点常见问题速查文件夹存在零宽字符或按步骤清理或使用带行号排查把拆成确认写成且置于证书路径错误或权限不足重新检查设置下证书与域名不匹配使用正确的或公认证书握手失败多数是证书权限未启动源站拒绝或超时检查防火墙后端进程使用了组合改用的方式收尾与快速检查面板地址代理默认管理员若已重置以新密码为准节点名称仅作备注建议包含区域机房配置等信息随时可改安全建议安装完成后在面板轮换服务器仅放行至此服务端已全部打通可将本文作为交接文档或贴到群友论坛祝使用顺利附录使用签发证书可选适用于不使用证书或需要公认浏览器信任的场景若域名在且保持橙云代理可能失败可临时改为灰云或改用准备验证目录作用为挑战准备目录在端口块中新增验证放在前作用确保验证文件可被直接访问重载作用让验证路径生效安装与初始化你的邮箱作用安装客户端设置别名切换到申请证书替换成你的域名作用使用位算法签发证书挑战文件存放在安装证书并自动重载作用将证书落到固定路径并在续期后自动重载切换证书路径若从改用证书作用让使用新的公认证书若仍希望保持橙云代理并自动续期可改用需要并在配置流程与类似但无需临时改灰云附录部署面板的替代方式按需选择官方一键安装脚本作用自动安装升级卸载并创建服务部署查看默认账号密码首次启动会输出作用使用容器运行面板数据存放在方便备份与迁移下载二进制进阶以为例版本号可按需调整作用直接运行官方二进制由托管监听到本机供反代附录在面板创建节点并获取命令打开面板服务节点点击添加节点节点名称仅作备注可随时修改点击下载复制命令获取包含面板地址与节点令牌的安装命令推荐使用第节的管道安装方式避免与造成的文件描述符问题你的作用以权限执行官方脚本自动写入配置并启动验证作用确认服务已连接面板并开始上报附录界面美化主题示例可选面板中打开设置主题管理选择上传主题从下载第三方主题压缩包如上传并启用可选在设置站点自定义头部加入额外请注意性能与安全提醒第三方主题来自社区务必选择可信来源并关注后续升级兼容性',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-11-03 15:14:00',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><div class="back-home-button"><i class="anzhiyufont anzhiyu-icon-grip-vertical"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">博客</div><div class="back-menu-list"><a class="back-menu-item" href="https://xiaoyunhai0.github.io/" title="我的博客"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" alt="我的博客"/><span class="back-menu-item-text">我的博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">个人导航</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://xiaoyunhai0.qzz.io/" title="导航站"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733189300_navigation.png" alt="导航站"/><span class="back-menu-item-text">导航站</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">域名邮箱</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://202221.xyz/" title="邮箱入口"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733194126_email.png" alt="邮箱入口"/><span class="back-menu-item-text">邮箱入口</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">GitHub</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://github.com/xiaoyunhai0" title="xiaoyunhai0"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733184061_github.png" alt="xiaoyunhai0"/><span class="back-menu-item-text">xiaoyunhai0</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">图床</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://443222.xyz/" title="XiaoyunImgHub"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757810469484_ImgBed.png" alt="XiaoyunImgHub"/><span class="back-menu-item-text">XiaoyunImgHub</span></a></div></div></div></div><a id="site-name" href="/" accesskey="h"><div class="title">霄云海的博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button only-home" id="travellings_button" title="随机前往一个开往项目网站"><a class="site-page" onclick="anzhiyu.totraveling()" title="随机前往一个开往项目网站" href="javascript:void(0);" rel="external nofollow" data-pjax-state="external"><i class="anzhiyufont anzhiyu-icon-train"></i></a></div><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://443222.xyz/file/Blog/QRcode/1757683727199_wxplus.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://443222.xyz/file/Blog/QRcode/1757683727199_wxplus.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://443222.xyz/file/Blog/QRcode/1757683737440_zfbplus.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://443222.xyz/file/Blog/QRcode/1757683737440_zfbplus.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Addressables/" style="font-size: 1.05rem;">Addressables<sup>1</sup></a><a href="/tags/Cloudflare/" style="font-size: 1.05rem;">Cloudflare<sup>1</sup></a><a href="/tags/DOTween/" style="font-size: 1.05rem;">DOTween<sup>1</sup></a><a href="/tags/Depth-to-Mesh/" style="font-size: 1.05rem;">Depth-to-Mesh<sup>1</sup></a><a href="/tags/Endless-Runner/" style="font-size: 1.05rem;">Endless Runner<sup>1</sup></a><a href="/tags/GitHub/" style="font-size: 1.05rem;">GitHub<sup>1</sup></a><a href="/tags/Hexo/" style="font-size: 1.05rem;">Hexo<sup>1</sup></a><a href="/tags/IL2CPP/" style="font-size: 1.05rem;">IL2CPP<sup>1</sup></a><a href="/tags/Komari/" style="font-size: 1.05rem;">Komari<sup>1</sup></a><a href="/tags/Lua/" style="font-size: 1.05rem;">Lua<sup>1</sup></a><a href="/tags/Multi-Display-Projection/" style="font-size: 1.05rem;">Multi-Display Projection<sup>1</sup></a><a href="/tags/Nginx/" style="font-size: 1.05rem;">Nginx<sup>1</sup></a><a href="/tags/Object-Pool/" style="font-size: 1.05rem;">Object Pool<sup>1</sup></a><a href="/tags/Orbbec-Astra/" style="font-size: 1.05rem;">Orbbec Astra<sup>1</sup></a><a href="/tags/Perlin-Noise/" style="font-size: 1.05rem;">Perlin Noise<sup>1</sup></a><a href="/tags/Procedural-Generation/" style="font-size: 1.05rem;">Procedural Generation<sup>1</sup></a><a href="/tags/ROI-Calibration/" style="font-size: 1.05rem;">ROI Calibration<sup>1</sup></a><a href="/tags/Real-time-Agents/" style="font-size: 1.05rem;">Real-time Agents<sup>1</sup></a><a href="/tags/SSH/" style="font-size: 1.05rem;">SSH<sup>1</sup></a><a href="/tags/Shader-Parameter-Hub/" style="font-size: 1.05rem;">Shader Parameter Hub<sup>1</sup></a><a href="/tags/TMP/" style="font-size: 1.05rem;">TMP<sup>1</sup></a><a href="/tags/Unity/" style="font-size: 1.05rem;">Unity<sup>4</sup></a><a href="/tags/WheelCollider/" style="font-size: 1.05rem;">WheelCollider<sup>1</sup></a><a href="/tags/Windows/" style="font-size: 1.05rem;">Windows<sup>1</sup></a><a href="/tags/xLua/" style="font-size: 1.05rem;">xLua<sup>2</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/" style="font-size: 1.05rem;">写作<sup>1</sup></a><a href="/tags/%E5%8D%8F%E7%A8%8B%E5%88%86%E5%B8%A7/" style="font-size: 1.05rem;">协程分帧<sup>1</sup></a><a href="/tags/%E5%B7%A5%E5%85%B7%E9%93%BE/" style="font-size: 1.05rem;">工具链<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 1.05rem;">工程化<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E8%A7%84%E8%8C%83/" style="font-size: 1.05rem;">工程规范<sup>1</sup></a><a href="/tags/%E6%8E%A2%E9%92%88/" style="font-size: 1.05rem;">探针<sup>1</sup></a><a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 1.05rem;">插件<sup>1</sup></a><a href="/tags/%E6%A1%86%E6%9E%B6/" style="font-size: 1.05rem;">框架<sup>1</sup></a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/" style="font-size: 1.05rem;">热更新<sup>1</sup></a><a href="/tags/%E8%AF%AD%E6%B3%95/" style="font-size: 1.05rem;">语法<sup>1</sup></a><a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 1.05rem;">部署<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/" style="font-size: 1.05rem;">项目结构<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/11/"><span class="card-archive-list-date">十一月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/08/"><span class="card-archive-list-date">八月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/07/"><span class="card-archive-list-date">七月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%96%87%E7%AB%A0/" itemprop="url">文章</a><i class="anzhiyufont anzhiyu-icon-angle-right post-meta-separator"></i><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%96%87%E7%AB%A0/%E8%BF%90%E7%BB%B4/" itemprop="url">运维</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/Komari/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>Komari</span></a><a class="article-meta__tags" href="/tags/%E6%8E%A2%E9%92%88/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>探针</span></a><a class="article-meta__tags" href="/tags/Cloudflare/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>Cloudflare</span></a><a class="article-meta__tags" href="/tags/Nginx/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>Nginx</span></a></span></div></div><h1 class="post-title" itemprop="name headline">Komari 探针安装教程（Cloudflare + Nginx）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-11-03T07:14:00.000Z" title="发表于 2025-11-03 15:14:00">2025-11-03</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-11-03T07:14:00.000Z" title="更新于 2025-11-03 15:14:00">2025-11-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为南京"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>南京</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://443222.xyz/file/Blog/article/1762154911642_22.png"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://xiaoyunhai0.github.io/2025/11/03/Komari%E6%8E%A2%E9%92%88/"><header><a class="post-meta-categories" href="/categories/%E6%96%87%E7%AB%A0/" itemprop="url">文章</a><a class="post-meta-categories" href="/categories/%E6%96%87%E7%AB%A0/%E8%BF%90%E7%BB%B4/" itemprop="url">运维</a><a href="/tags/Komari/" tabindex="-1" itemprop="url">Komari</a><a href="/tags/%E6%8E%A2%E9%92%88/" tabindex="-1" itemprop="url">探针</a><a href="/tags/Cloudflare/" tabindex="-1" itemprop="url">Cloudflare</a><a href="/tags/Nginx/" tabindex="-1" itemprop="url">Nginx</a><h1 id="CrawlerTitle" itemprop="name headline">Komari 探针安装教程（Cloudflare + Nginx）</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">xiaoyunhai</span><time itemprop="dateCreated datePublished" datetime="2025-11-03T07:14:00.000Z" title="发表于 2025-11-03 15:14:00">2025-11-03</time><time itemprop="dateCreated datePublished" datetime="2025-11-03T07:14:00.000Z" title="更新于 2025-11-03 15:14:00">2025-11-03</time></header><blockquote>
+<p>目标：让 Komari 服务端运行在 <code>https://tz.202221.xyz</code>（Cloudflare 代理），并在服务器上部署 <strong>Komari Agent</strong> 上报数据。全文逐步解释命令作用，保证照做即可完成部署。</p>
+</blockquote>
+<span id="more"></span>
+
+<hr>
+<h2 id="0-前提与环境"><a href="#0-前提与环境" class="headerlink" title="0. 前提与环境"></a>0. 前提与环境</h2><ul>
+<li>系统：Debian &#x2F; Ubuntu（示例基于 Debian）</li>
+<li>域名：<code>tz.202221.xyz</code> 已托管在 Cloudflare（橙云 &#x3D; 代理，灰云 &#x3D; 仅 DNS）</li>
+<li>Web：Nginx 负责反代本机后端（Komari 服务端监听 <code>127.0.0.1:25774</code>）</li>
+<li>权限：具备 <code>sudo</code> 权限</li>
+</ul>
+<blockquote>
+<p><strong>术语说明</strong>  </p>
+<ul>
+<li><strong>服务端面板</strong>：Komari 的 Web 控制台，已经通过 Nginx + HTTPS 部署。  </li>
+<li><strong>Agent &#x2F; 探针</strong>：安装在被监控节点上的客户端，通过面板签发的 <strong>token</strong> 建立连接。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="1-核对域名解析与服务器-IP"><a href="#1-核对域名解析与服务器-IP" class="headerlink" title="1. 核对域名解析与服务器 IP"></a>1. 核对域名解析与服务器 IP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig +short tz.202221.xyz A</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：确认 <code>tz.202221.xyz</code> 当前解析到的 IPv4 地址。启用 Cloudflare 代理后通常会返回 Cloudflare Anycast IP。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -4 ifconfig.co</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：查看当前服务器的公网 IPv4。若与上一条不同且为真实地址，表示域名已走 Cloudflare 代理，可继续配置 Origin 证书方案。</li>
+</ul>
+<hr>
+<h2 id="2-配置-Nginx-反向代理与-HTTPS"><a href="#2-配置-Nginx-反向代理与-HTTPS" class="headerlink" title="2. 配置 Nginx 反向代理与 HTTPS"></a>2. 配置 Nginx 反向代理与 HTTPS</h2><h3 id="2-1-新建站点配置"><a href="#2-1-新建站点配置" class="headerlink" title="2.1 新建站点配置"></a>2.1 新建站点配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/nginx/sites-enabled/komari</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：创建或编辑 Nginx 站点配置。</li>
+</ul>
+<p>写入以下内容（已适配 Cloudflare Origin 证书与 WebSocket）：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> tz.<span class="number">202221</span>.xyz;</span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$host</span><span class="variable">$request_uri</span>;  <span class="comment"># 强制跳转到 HTTPS</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">http2</span> <span class="literal">on</span>;  <span class="comment"># 建议在 server 块开启 HTTP/2</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">server_name</span> tz.<span class="number">202221</span>.xyz;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 第 3 节生成的 Cloudflare Origin 证书</span></span><br><span class="line">    <span class="attribute">ssl_certificate</span>     /etc/ssl/cf-origin/tz.<span class="number">202221</span>.xyz.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/ssl/cf-origin/tz.<span class="number">202221</span>.xyz.key;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">client_max_body_size</span> <span class="number">50M</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:25774;  <span class="comment"># 反代 Komari 服务端</span></span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Upgrade <span class="variable">$http_upgrade</span>;   <span class="comment"># WebSocket 支持</span></span><br><span class="line">        <span class="attribute">proxy_set_header</span> Connection <span class="string">&quot;upgrade&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">proxy_buffering</span> <span class="literal">off</span>;  <span class="comment"># 关闭代理缓冲，降低延迟</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果看到 <code>listen ... http2 is deprecated</code>，说明应将 <code>http2</code> 写成 <code>http2 on;</code> 并放在 <code>server &#123;&#125;</code> 内，如上所示。</p>
+</blockquote>
+<h3 id="2-2-清理零宽字符（推荐）"><a href="#2-2-清理零宽字符（推荐）" class="headerlink" title="2.2 清理零宽字符（推荐）"></a>2.2 清理零宽字符（推荐）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> /etc/nginx/sites-enabled/komari /etc/nginx/sites-enabled/komari.bak</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：备份配置文件。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> perl -i -pe <span class="string">&#x27;s/\x&#123;FEFF&#125;|\x&#123;200B&#125;|\x&#123;200C&#125;|\x&#123;200D&#125;//g&#x27;</span> /etc/nginx/sites-enabled/komari</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：移除 UTF-8 BOM &#x2F; 零宽字符，避免出现 <code>unknown directive</code> 报错。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -nP --color=always $<span class="string">&#x27;(\x&#123;FEFF&#125;|\x&#123;200B&#125;|\x&#123;200C&#125;|\x&#123;200D&#125;)&#x27;</span> /etc/nginx/sites-enabled/komari || <span class="built_in">echo</span> <span class="string">&quot;OK: no zero-width chars&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：确认文件已无隐形字符。</li>
+</ul>
+<h3 id="2-3-测试并重载"><a href="#2-3-测试并重载" class="headerlink" title="2.3 测试并重载"></a>2.3 测试并重载</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nginx -t</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：检测 Nginx 配置语法。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl reload nginx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：平滑重载 Nginx，让新配置生效。</li>
+</ul>
+<hr>
+<h2 id="3-使用-Cloudflare-Origin-证书（Full-Strict）"><a href="#3-使用-Cloudflare-Origin-证书（Full-Strict）" class="headerlink" title="3. 使用 Cloudflare Origin 证书（Full Strict）"></a>3. 使用 Cloudflare Origin 证书（Full Strict）</h2><blockquote>
+<p>因域名启用 Cloudflare 代理，推荐使用 <strong>Cloudflare Origin Certificate</strong>：  </p>
+<ul>
+<li>浏览器 → Cloudflare：使用 Cloudflare Edge 证书  </li>
+<li>Cloudflare → 源站：使用 Origin 证书（需在 Cloudflare 控制台把 SSL 模式设为 <strong>Full (strict)</strong>）</li>
+</ul>
+</blockquote>
+<h3 id="3-1-在-Cloudflare-控制台生成证书"><a href="#3-1-在-Cloudflare-控制台生成证书" class="headerlink" title="3.1 在 Cloudflare 控制台生成证书"></a>3.1 在 Cloudflare 控制台生成证书</h3><ol>
+<li>进入 <strong>SSL&#x2F;TLS → Origin Server → Create certificate</strong></li>
+<li>Hostnames：填写 <code>tz.202221.xyz</code></li>
+<li>Key type：RSA（默认即可）</li>
+<li>有效期：默认（Cloudflare 会提供长期证书）</li>
+<li>下载 <strong>证书（.pem&#x2F;.crt）</strong> 与 <strong>私钥（.key）</strong></li>
+</ol>
+<h3 id="3-2-上传到服务器并设定权限"><a href="#3-2-上传到服务器并设定权限" class="headerlink" title="3.2 上传到服务器并设定权限"></a>3.2 上传到服务器并设定权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /etc/ssl/cf-origin</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：创建存储 Origin 证书的目录。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/ssl/cf-origin/tz.202221.xyz.crt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：粘贴 Cloudflare 提供的证书内容（以 <code>-----BEGIN CERTIFICATE-----</code> 开头）。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/ssl/cf-origin/tz.202221.xyz.key</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：粘贴 Origin 私钥内容（以 <code>-----BEGIN PRIVATE KEY-----</code> 开头）。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> root:root /etc/ssl/cf-origin/tz.202221.xyz.&#123;crt,key&#125;</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> 644 /etc/ssl/cf-origin/tz.202221.xyz.crt</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> 600 /etc/ssl/cf-origin/tz.202221.xyz.key</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：限制证书与私钥权限，私钥仅 root 可读。</li>
+</ul>
+<h3 id="3-3-关联到-Nginx"><a href="#3-3-关联到-Nginx" class="headerlink" title="3.3 关联到 Nginx"></a>3.3 关联到 Nginx</h3><p>第 2 步已写入：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ssl_certificate</span>     /etc/ssl/cf-origin/tz.<span class="number">202221</span>.xyz.crt;</span><br><span class="line"><span class="attribute">ssl_certificate_key</span> /etc/ssl/cf-origin/tz.<span class="number">202221</span>.xyz.key;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nginx -t &amp;&amp; <span class="built_in">sudo</span> systemctl reload nginx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：验证配置并重载 Nginx。</li>
+</ul>
+<h3 id="3-4-Cloudflare-端设置"><a href="#3-4-Cloudflare-端设置" class="headerlink" title="3.4 Cloudflare 端设置"></a>3.4 Cloudflare 端设置</h3><ul>
+<li>Cloudflare 控制台 <strong>SSL&#x2F;TLS → Overview</strong>：切换为 <strong>Full (strict)</strong></li>
+<li><strong>作用</strong>：强制校验证书链与域名匹配，防止伪造证书导致的安全风险。</li>
+</ul>
+<hr>
+<h2 id="4-验证服务端与回源"><a href="#4-验证服务端与回源" class="headerlink" title="4. 验证服务端与回源"></a>4. 验证服务端与回源</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ss -ltnp | grep 25774 || <span class="built_in">sudo</span> lsof -iTCP:25774 -sTCP:LISTEN</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：确认 Komari 服务端监听 <code>127.0.0.1:25774</code>。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s -o /dev/null -w <span class="string">&quot;%&#123;http_code&#125;\n&quot;</span> http://127.0.0.1:25774/</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：检查后端接口是否返回 2xx&#x2F;3xx 状态码。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -vk --resolve tz.202221.xyz:443:你的服务器IP https://tz.202221.xyz/</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：直接连接源站测试 HTTPS 是否可用。由于 Origin 证书仅供 Cloudflare 信任，此处使用 <code>-k</code> 忽略证书校验属正常。</li>
+</ul>
+<hr>
+<h2 id="5-安装-Komari-Agent（探针）"><a href="#5-安装-Komari-Agent（探针）" class="headerlink" title="5. 安装 Komari Agent（探针）"></a>5. 安装 Komari Agent（探针）</h2><blockquote>
+<p><strong>需要的参数</strong>  </p>
+<ul>
+<li><code>-e</code> &#x2F; <code>--endpoint</code>：Komari 面板地址，如 <code>https://tz.202221.xyz</code>  </li>
+<li><code>-t</code> &#x2F; <code>--token</code>：在面板创建节点后获得的令牌（敏感，安装后建议轮换）</li>
+</ul>
+</blockquote>
+<h3 id="5-1-推荐：管道安装（避免-sudo-与"><a href="#5-1-推荐：管道安装（避免-sudo-与" class="headerlink" title="5.1 推荐：管道安装（避免 sudo 与 &lt;() 冲突）"></a>5.1 推荐：管道安装（避免 sudo 与 <code>&lt;()</code> 冲突）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://raw.githubusercontent.com/komari-monitor/komari-agent/main/install.sh \</span><br><span class="line">| <span class="built_in">sudo</span> bash -s -- -e https://tz.202221.xyz -t <span class="string">&#x27;你的TOKEN&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>curl -fsSL</code>：静默下载脚本，失败时返回非零状态；<code>-L</code> 支持重定向。</li>
+<li><code>sudo bash -s --</code>：将脚本通过管道交给 root 执行；<code>-s</code> 表示脚本来自标准输入，<code>--</code> 之后是脚本参数。</li>
+<li><code>-e/-t</code>：传入面板地址与节点 token，脚本会写入 systemd 服务并启动 Agent。</li>
+</ul>
+<h3 id="5-2-备选：先保存再执行"><a href="#5-2-备选：先保存再执行" class="headerlink" title="5.2 备选：先保存再执行"></a>5.2 备选：先保存再执行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL -o /tmp/komari-agent-install.sh \</span><br><span class="line">  https://raw.githubusercontent.com/komari-monitor/komari-agent/main/install.sh</span><br><span class="line"><span class="built_in">sudo</span> bash /tmp/komari-agent-install.sh -e https://tz.202221.xyz -t <span class="string">&#x27;你的TOKEN&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：若不习惯管道执行，可先下载到本地再以 root 运行。</li>
+</ul>
+<h3 id="5-3-请勿与"><a href="#5-3-请勿与" class="headerlink" title="5.3 请勿与 &lt;() 混用"></a>5.3 请勿与 <code>&lt;()</code> 混用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 反例：会出现 “bash: /dev/fd/63: No such file or directory”</span></span><br><span class="line"><span class="built_in">sudo</span> bash &lt;(curl -sL https://raw.githubusercontent.com/.../install.sh) -e ... -t ...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>原因</strong>：<code>&lt;( )</code> 依赖临时文件描述符，<code>sudo</code> 默认会关闭，导致脚本无法读取。</li>
+</ul>
+<hr>
+<h2 id="6-验证-Agent-运行状态"><a href="#6-验证-Agent-运行状态" class="headerlink" title="6. 验证 Agent 运行状态"></a>6. 验证 Agent 运行状态</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status komari-agent --no-pager -l</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：查看 Agent systemd 服务是否 <code>active (running)</code>。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> journalctl -u komari-agent -n 200 --no-pager</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：检查最近日志，确认已连接到 <code>https://tz.202221.xyz</code> 并开始上报。</li>
+</ul>
+<blockquote>
+<p>若在面板看到节点在线、心跳与信息刷新，则安装成功。</p>
+</blockquote>
+<hr>
+<h2 id="7-（可选）服务端管理与优化"><a href="#7-（可选）服务端管理与优化" class="headerlink" title="7.（可选）服务端管理与优化"></a>7.（可选）服务端管理与优化</h2><h3 id="7-1-重置面板管理员密码"><a href="#7-1-重置面板管理员密码" class="headerlink" title="7.1 重置面板管理员密码"></a>7.1 重置面板管理员密码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> /opt/komari/komari chpasswd -d /opt/komari/data/komari.db -p <span class="string">&#x27;新密码&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：修改 <code>admin</code> 管理员密码，执行后需重启服务端生效。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart komari</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：重启 Komari 服务端（若运行在 Docker，可使用 <code>docker restart 容器名</code>）。</li>
+</ul>
+<h3 id="7-2-统一时区（示例：东京）"><a href="#7-2-统一时区（示例：东京）" class="headerlink" title="7.2 统一时区（示例：东京）"></a>7.2 统一时区（示例：东京）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> timedatectl set-timezone Asia/Tokyo</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：调整系统时区，便于日志与排班阅读。</li>
+</ul>
+<h3 id="7-3-在-Cloudflare-代理下保留真实客户端-IP（可选）"><a href="#7-3-在-Cloudflare-代理下保留真实客户端-IP（可选）" class="headerlink" title="7.3 在 Cloudflare 代理下保留真实客户端 IP（可选）"></a>7.3 在 Cloudflare 代理下保留真实客户端 IP（可选）</h3><p>在 Nginx 全局 <code>http &#123;&#125;</code> 或站点 <code>server &#123;&#125;</code> 中加入：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">real_ip_header</span> CF-Connecting-IP;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">173.245.48.0</span>/<span class="number">20</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">103.21.244.0</span>/<span class="number">22</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">103.22.200.0</span>/<span class="number">22</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">103.31.4.0</span>/<span class="number">22</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">141.101.64.0</span>/<span class="number">18</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">108.162.192.0</span>/<span class="number">18</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">190.93.240.0</span>/<span class="number">20</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">188.114.96.0</span>/<span class="number">20</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">197.234.240.0</span>/<span class="number">22</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">198.41.128.0</span>/<span class="number">17</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">162.158.0.0</span>/<span class="number">15</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">104.16.0.0</span>/<span class="number">13</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">104.24.0.0</span>/<span class="number">14</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">172.64.0.0</span>/<span class="number">13</span>;</span><br><span class="line"><span class="attribute">set_real_ip_from</span> <span class="number">131.0.72.0</span>/<span class="number">22</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nginx -t &amp;&amp; <span class="built_in">sudo</span> systemctl reload nginx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：让应用记录真实访客 IP，而非 Cloudflare 节点 IP。</li>
+</ul>
+<hr>
+<h2 id="8-常见问题速查"><a href="#8-常见问题速查" class="headerlink" title="8. 常见问题速查"></a>8. 常见问题速查</h2><ul>
+<li><strong><code>unknown directive &quot;...&quot;</code></strong>：文件夹存在零宽字符或 BOM。按 2.2 步骤清理，或使用 <code>nl -ba /etc/nginx/sites-enabled/komari | sed -n &#39;1,80p&#39;</code> 带行号排查。</li>
+<li><strong><code>listen ... http2 is deprecated</code></strong>：把 <code>listen 443 ssl http2;</code> 拆成 <code>listen 443 ssl;</code> + <code>http2 on;</code>。</li>
+<li><strong><code>invalid number of arguments in &quot;http2&quot;</code></strong>：确认写成 <code>http2 on;</code> 且置于 <code>server &#123;&#125;</code>。</li>
+<li><strong><code>[emerg] cannot load certificate</code></strong>：证书路径错误或权限不足，重新检查 3.2 设置。</li>
+<li><strong>Cloudflare 5xx</strong>：<ul>
+<li><strong>526</strong>：Full (strict) 下证书与域名不匹配。使用正确的 Origin 或公认证书。</li>
+<li><strong>525</strong>：TLS 握手失败，多数是证书&#x2F;权限&#x2F;Nginx 443 未启动。</li>
+<li><strong>521&#x2F;522</strong>：源站拒绝或超时，检查 Nginx、防火墙、后端进程。</li>
+</ul>
+</li>
+<li><strong><code>bash: /dev/fd/*</code></strong>：使用了 <code>sudo</code> + <code>&lt;()</code> 组合，改用 5.1 &#x2F; 5.2 的方式。</li>
+</ul>
+<hr>
+<h2 id="9-收尾与快速检查"><a href="#9-收尾与快速检查" class="headerlink" title="9. 收尾与快速检查"></a>9. 收尾与快速检查</h2><ul>
+<li>面板地址：<code>https://tz.202221.xyz</code>（Cloudflare 代理 + Full strict）</li>
+<li>默认管理员：<code>admin</code>（若已重置，以新密码为准）</li>
+<li>节点名称：仅作备注，建议包含区域&#x2F;机房配置等信息，随时可改</li>
+<li>安全建议：Agent 安装完成后在面板轮换 token；服务器仅放行 80&#x2F;443</li>
+</ul>
+<blockquote>
+<p>至此，<strong>Komari 服务端 + Nginx&#x2F;Cloudflare + Agent</strong> 已全部打通。可将本文作为交接文档或贴到群友&#x2F;论坛，祝使用顺利。</p>
+</blockquote>
+<hr>
+<h1 id="附录-A：使用-Let’s-Encrypt（acme-sh）签发证书（可选）"><a href="#附录-A：使用-Let’s-Encrypt（acme-sh）签发证书（可选）" class="headerlink" title="附录 A：使用 Let’s Encrypt（acme.sh）签发证书（可选）"></a>附录 A：使用 Let’s Encrypt（acme.sh）签发证书（可选）</h1><blockquote>
+<p>适用于不使用 Cloudflare Origin 证书，或需要公认浏览器信任的场景。若域名在 Cloudflare 且保持橙云代理，HTTP-01 可能失败，可临时改为灰云或改用 DNS-01。</p>
+</blockquote>
+<p><strong>A. 准备验证目录</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /var/www/letsencrypt</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> www-data:www-data /var/www/letsencrypt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：为 ACME 挑战准备 webroot 目录。</li>
+</ul>
+<p><strong>B. 在 80 端口 server 块中新增验证 location（放在 <code>location /</code> 前）</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">location</span><span class="regexp"> ^~</span> /.well-known/acme-challenge/ &#123;</span><br><span class="line">    <span class="attribute">root</span> /var/www/letsencrypt;</span><br><span class="line">    <span class="attribute">default_type</span> <span class="string">&quot;text/plain&quot;</span>;</span><br><span class="line">    <span class="attribute">try_files</span> <span class="variable">$uri</span> =<span class="number">404</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：确保验证文件可被直接访问。</li>
+</ul>
+<p><strong>C. 重载 Nginx</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nginx -t &amp;&amp; <span class="built_in">sudo</span> systemctl reload nginx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：让验证路径生效。</li>
+</ul>
+<p><strong>D. 安装与初始化 acme.sh</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl https://get.acme.sh | sh -s email=你的邮箱</span><br><span class="line"><span class="built_in">alias</span> acme.sh=~/.acme.sh/acme.sh</span><br><span class="line">acme.sh --set-default-ca --server letsencrypt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：安装 ACME 客户端、设置别名、切换到 Let’s Encrypt CA。</li>
+</ul>
+<p><strong>E. 申请证书（替换成你的域名）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --issue -d tz.202221.xyz -k ec-256 --webroot /var/www/letsencrypt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：使用 ECDSA 256 位算法签发证书，挑战文件存放在 webroot。</li>
+</ul>
+<p><strong>F. 安装证书并自动重载 Nginx</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /etc/ssl/komari</span><br><span class="line">acme.sh --install-cert -d tz.202221.xyz --ecc \</span><br><span class="line">  --key-file       /etc/ssl/komari/privkey.key \</span><br><span class="line">  --fullchain-file /etc/ssl/komari/fullchain.cer \</span><br><span class="line">  --reloadcmd      <span class="string">&quot;systemctl reload nginx&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：将证书落到固定路径，并在续期后自动重载 Nginx。</li>
+</ul>
+<p><strong>G. 切换 Nginx 证书路径（若从 Cloudflare Origin 改用 LE 证书）</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ssl_certificate</span>     /etc/ssl/komari/fullchain.cer;</span><br><span class="line"><span class="attribute">ssl_certificate_key</span> /etc/ssl/komari/privkey.key;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：让 Nginx 使用新的公认证书。</li>
+</ul>
+<blockquote>
+<p>若仍希望保持橙云代理，并自动续期，可改用 <strong>acme.sh + Cloudflare DNS-01</strong>（需要 Cloudflare API Token 并在 <code>~/.acme.sh/account.conf</code> 配置），流程与 HTTP-01 类似但无需临时改灰云。</p>
+</blockquote>
+<hr>
+<h1 id="附录-B：部署-Komari-面板的替代方式（按需选择）"><a href="#附录-B：部署-Komari-面板的替代方式（按需选择）" class="headerlink" title="附录 B：部署 Komari 面板的替代方式（按需选择）"></a>附录 B：部署 Komari 面板的替代方式（按需选择）</h1><p><strong>1）官方一键安装脚本（systemd）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://raw.githubusercontent.com/komari-monitor/komari/main/install-komari.sh -o install-komari.sh</span><br><span class="line"><span class="built_in">chmod</span> +x install-komari.sh</span><br><span class="line"><span class="built_in">sudo</span> ./install-komari.sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：自动安装 &#x2F; 升级 &#x2F; 卸载 Komari，并创建 systemd 服务。</li>
+</ul>
+<p><strong>2）Docker 部署</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ./data &amp;&amp; <span class="built_in">cd</span> ./</span><br><span class="line">docker run -d \</span><br><span class="line">  -p 25774:25774 \</span><br><span class="line">  -v $(<span class="built_in">pwd</span>)/data:/app/data \</span><br><span class="line">  --name komari \</span><br><span class="line">  ghcr.io/komari-monitor/komari:latest</span><br><span class="line"><span class="comment"># 查看默认账号密码（首次启动会输出）</span></span><br><span class="line">docker logs komari</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：使用容器运行面板，数据存放在 <code>./data</code> 方便备份与迁移。</li>
+</ul>
+<p><strong>3）下载二进制 + systemd（进阶）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以 amd64 为例，版本号可按需调整</span></span><br><span class="line">curl -L -o /usr/local/bin/komari \</span><br><span class="line">  https://github.com/komari-monitor/komari/releases/download/1.0.9/komari-linux-amd64</span><br><span class="line"><span class="built_in">chmod</span> +x /usr/local/bin/komari</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/systemd/system/komari.service &gt;/dev/null &lt;&lt;<span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=Komari Server</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/local/bin/komari server -l 127.0.0.1:25774</span><br><span class="line">WorkingDirectory=/opt/komari</span><br><span class="line">Restart=always</span><br><span class="line">RestartSec=5</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /opt/komari</span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> --now komari</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：直接运行官方二进制，由 systemd 托管，监听到本机 25774 供 Nginx 反代。</li>
+</ul>
+<hr>
+<h1 id="附录-C：在面板创建节点并获取-Agent-命令"><a href="#附录-C：在面板创建节点并获取-Agent-命令" class="headerlink" title="附录 C：在面板创建节点并获取 Agent 命令"></a>附录 C：在面板创建节点并获取 Agent 命令</h1><ol>
+<li>打开面板 <strong>服务 → 节点</strong>，点击 <strong>添加节点</strong>。节点名称仅作备注，可随时修改。</li>
+<li>点击 <strong>下载 &#x2F; 复制命令</strong>，获取包含 <code>-e</code>（面板地址）与 <code>-t</code>（节点令牌）的安装命令。</li>
+<li>推荐使用第 5.1 节的管道安装方式，避免 <code>sudo</code> 与 <code>&lt;()</code> 造成的文件描述符问题。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://raw.githubusercontent.com/komari-monitor/komari-agent/main/install.sh \</span><br><span class="line">| <span class="built_in">sudo</span> bash -s -- -e https://tz.202221.xyz -t <span class="string">&#x27;你的TOKEN&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：以 root 权限执行官方脚本，自动写入配置并启动 Agent。</li>
+</ul>
+<p><strong>验证</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status komari-agent --no-pager -l</span><br><span class="line"><span class="built_in">sudo</span> journalctl -u komari-agent -n 200 --no-pager</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>作用</strong>：确认服务已连接面板并开始上报。</li>
+</ul>
+<hr>
+<h1 id="附录-D：界面美化（Mochi-主题示例，可选）"><a href="#附录-D：界面美化（Mochi-主题示例，可选）" class="headerlink" title="附录 D：界面美化（Mochi 主题示例，可选）"></a>附录 D：界面美化（Mochi 主题示例，可选）</h1><ol>
+<li>面板中打开 <strong>设置 → 主题管理</strong>，选择 <strong>上传主题</strong>。</li>
+<li>从 GitHub 下载第三方主题压缩包（如 Mochi），上传并启用。</li>
+<li>（可选）在 <strong>设置 → 站点 → 自定义头部</strong> 加入额外 JS&#x2F;CSS。请注意性能与安全。</li>
+</ol>
+<blockquote>
+<p>提醒：第三方主题来自社区，务必选择可信来源，并关注后续升级兼容性。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" title="头像" alt="头像"><img class="post-copyright__author_img_front" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" title="头像" alt="头像"></a><div class="post-copyright__author_name">xiaoyunhai</div><div class="post-copyright__author_desc">记录·折腾·输出</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://xiaoyunhai0.github.io/2025/11/03/Komari%E6%8E%A2%E9%92%88/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://xiaoyunhai0.github.io/2025/11/03/Komari%E6%8E%A2%E9%92%88/')">Komari 探针安装教程（Cloudflare + Nginx）</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="https://443222.xyz/file/Blog/QRcode/1757683727199_wxplus.png" target="_blank"><img class="post-qr-code-img" src="https://443222.xyz/file/Blog/QRcode/1757683727199_wxplus.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://443222.xyz/file/Blog/QRcode/1757683737440_zfbplus.png" target="_blank"><img class="post-qr-code-img" src="https://443222.xyz/file/Blog/QRcode/1757683737440_zfbplus.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://xiaoyunhai0.github.io/2025/11/03/Komari%E6%8E%A2%E9%92%88/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=Komari 探针安装教程（Cloudflare + Nginx）&amp;url=https://xiaoyunhai0.github.io/2025/11/03/Komari%E6%8E%A2%E9%92%88/&amp;pic=https://443222.xyz/file/Blog/article/1762154911642_22.png" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://xiaoyunhai0.github.io" target="_blank">霄云海的博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/Komari/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>Komari<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/%E6%8E%A2%E9%92%88/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>探针<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/Cloudflare/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>Cloudflare<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/Nginx/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>Nginx<span class="tagsPageCount">1</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="https://443222.xyz/file/Blog/article/1762154911642_22.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2025/10/10/Unity_Framework/"><img class="prev-cover" src="https://443222.xyz/file/Blog/article/1762154920289_15.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Unity 框架</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">这里是霄云海的个人博客，记录开发与生活。</div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://bu.dusays.com/2023/05/13/645fa415e8694.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%89%8D%E6%8F%90%E4%B8%8E%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">0. 前提与环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A0%B8%E5%AF%B9%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%99%A8-IP"><span class="toc-number">2.</span> <span class="toc-text">1. 核对域名解析与服务器 IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE-Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS"><span class="toc-number">3.</span> <span class="toc-text">2. 配置 Nginx 反向代理与 HTTPS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%96%B0%E5%BB%BA%E7%AB%99%E7%82%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 新建站点配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%B8%85%E7%90%86%E9%9B%B6%E5%AE%BD%E5%AD%97%E7%AC%A6%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 清理零宽字符（推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%B5%8B%E8%AF%95%E5%B9%B6%E9%87%8D%E8%BD%BD"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 测试并重载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8-Cloudflare-Origin-%E8%AF%81%E4%B9%A6%EF%BC%88Full-Strict%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">3. 使用 Cloudflare Origin 证书（Full Strict）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%9C%A8-Cloudflare-%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 在 Cloudflare 控制台生成证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%B8%8A%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E8%AE%BE%E5%AE%9A%E6%9D%83%E9%99%90"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 上传到服务器并设定权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%85%B3%E8%81%94%E5%88%B0-Nginx"><span class="toc-number">4.3.</span> <span class="toc-text">3.3 关联到 Nginx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-Cloudflare-%E7%AB%AF%E8%AE%BE%E7%BD%AE"><span class="toc-number">4.4.</span> <span class="toc-text">3.4 Cloudflare 端设置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%AA%8C%E8%AF%81%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%B8%8E%E5%9B%9E%E6%BA%90"><span class="toc-number">5.</span> <span class="toc-text">4. 验证服务端与回源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%AE%89%E8%A3%85-Komari-Agent%EF%BC%88%E6%8E%A2%E9%92%88%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">5. 安装 Komari Agent（探针）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%8E%A8%E8%8D%90%EF%BC%9A%E7%AE%A1%E9%81%93%E5%AE%89%E8%A3%85%EF%BC%88%E9%81%BF%E5%85%8D-sudo-%E4%B8%8E"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 推荐：管道安装（避免 sudo 与 &lt;() 冲突）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%A4%87%E9%80%89%EF%BC%9A%E5%85%88%E4%BF%9D%E5%AD%98%E5%86%8D%E6%89%A7%E8%A1%8C"><span class="toc-number">6.2.</span> <span class="toc-text">5.2 备选：先保存再执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E8%AF%B7%E5%8B%BF%E4%B8%8E"><span class="toc-number">6.3.</span> <span class="toc-text">5.3 请勿与 &lt;() 混用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E9%AA%8C%E8%AF%81-Agent-%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81"><span class="toc-number">7.</span> <span class="toc-text">6. 验证 Agent 运行状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="toc-number">8.</span> <span class="toc-text">7.（可选）服务端管理与优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E9%87%8D%E7%BD%AE%E9%9D%A2%E6%9D%BF%E7%AE%A1%E7%90%86%E5%91%98%E5%AF%86%E7%A0%81"><span class="toc-number">8.1.</span> <span class="toc-text">7.1 重置面板管理员密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E7%BB%9F%E4%B8%80%E6%97%B6%E5%8C%BA%EF%BC%88%E7%A4%BA%E4%BE%8B%EF%BC%9A%E4%B8%9C%E4%BA%AC%EF%BC%89"><span class="toc-number">8.2.</span> <span class="toc-text">7.2 统一时区（示例：东京）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%E5%9C%A8-Cloudflare-%E4%BB%A3%E7%90%86%E4%B8%8B%E4%BF%9D%E7%95%99%E7%9C%9F%E5%AE%9E%E5%AE%A2%E6%88%B7%E7%AB%AF-IP%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number">8.3.</span> <span class="toc-text">7.3 在 Cloudflare 代理下保留真实客户端 IP（可选）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E9%80%9F%E6%9F%A5"><span class="toc-number">9.</span> <span class="toc-text">8. 常见问题速查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E6%94%B6%E5%B0%BE%E4%B8%8E%E5%BF%AB%E9%80%9F%E6%A3%80%E6%9F%A5"><span class="toc-number">10.</span> <span class="toc-text">9. 收尾与快速检查</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%99%84%E5%BD%95-A%EF%BC%9A%E4%BD%BF%E7%94%A8-Let%E2%80%99s-Encrypt%EF%BC%88acme-sh%EF%BC%89%E7%AD%BE%E5%8F%91%E8%AF%81%E4%B9%A6%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number"></span> <span class="toc-text">附录 A：使用 Let’s Encrypt（acme.sh）签发证书（可选）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%99%84%E5%BD%95-B%EF%BC%9A%E9%83%A8%E7%BD%B2-Komari-%E9%9D%A2%E6%9D%BF%E7%9A%84%E6%9B%BF%E4%BB%A3%E6%96%B9%E5%BC%8F%EF%BC%88%E6%8C%89%E9%9C%80%E9%80%89%E6%8B%A9%EF%BC%89"><span class="toc-number"></span> <span class="toc-text">附录 B：部署 Komari 面板的替代方式（按需选择）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%99%84%E5%BD%95-C%EF%BC%9A%E5%9C%A8%E9%9D%A2%E6%9D%BF%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9%E5%B9%B6%E8%8E%B7%E5%8F%96-Agent-%E5%91%BD%E4%BB%A4"><span class="toc-number"></span> <span class="toc-text">附录 C：在面板创建节点并获取 Agent 命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%99%84%E5%BD%95-D%EF%BC%9A%E7%95%8C%E9%9D%A2%E7%BE%8E%E5%8C%96%EF%BC%88Mochi-%E4%B8%BB%E9%A2%98%E7%A4%BA%E4%BE%8B%EF%BC%8C%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number"></span> <span class="toc-text">附录 D：界面美化（Mochi 主题示例，可选）</span></a></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/11/03/Komari%E6%8E%A2%E9%92%88/" title="Komari 探针安装教程（Cloudflare + Nginx）"><img src="https://443222.xyz/file/Blog/article/1762154911642_22.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Komari 探针安装教程（Cloudflare + Nginx）"/></a><div class="content"><a class="title" href="/2025/11/03/Komari%E6%8E%A2%E9%92%88/" title="Komari 探针安装教程（Cloudflare + Nginx）">Komari 探针安装教程（Cloudflare + Nginx）</a><time datetime="2025-11-03T07:14:00.000Z" title="发表于 2025-11-03 15:14:00">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/10/Unity_Framework/" title="Unity 框架"><img src="https://443222.xyz/file/Blog/article/1762154920289_15.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Unity 框架"/></a><div class="content"><a class="title" href="/2025/10/10/Unity_Framework/" title="Unity 框架">Unity 框架</a><time datetime="2025-10-10T07:12:00.000Z" title="发表于 2025-10-10 15:12:00">2025-10-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/03/Unity%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6/" title="Unity 常用插件工具箱"><img src="https://443222.xyz/file/Blog/article/1762154920837_16.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Unity 常用插件工具箱"/></a><div class="content"><a class="title" href="/2025/10/03/Unity%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6/" title="Unity 常用插件工具箱">Unity 常用插件工具箱</a><time datetime="2025-10-03T07:10:00.000Z" title="发表于 2025-10-03 15:10:00">2025-10-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/01/Unity%E5%B8%B8%E7%94%A8%E5%B7%A5%E7%A8%8B%E7%9B%AE%E5%BD%95/" title="Unity 常用工程目录结构与实践"><img src="https://443222.xyz/file/Blog/article/1762154920988_11.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Unity 常用工程目录结构与实践"/></a><div class="content"><a class="title" href="/2025/10/01/Unity%E5%B8%B8%E7%94%A8%E5%B7%A5%E7%A8%8B%E7%9B%AE%E5%BD%95/" title="Unity 常用工程目录结构与实践">Unity 常用工程目录结构与实践</a><time datetime="2025-10-01T07:08:00.000Z" title="发表于 2025-10-01 15:08:00">2025-10-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/" title="Git Push&amp;Pull 使用 SSH（含 443 端口）配置"><img src="https://443222.xyz/file/Blog/article/1757683772501_6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git Push&amp;Pull 使用 SSH（含 443 端口）配置"/></a><div class="content"><a class="title" href="/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/" title="Git Push&amp;Pull 使用 SSH（含 443 端口）配置">Git Push&amp;Pull 使用 SSH（含 443 端口）配置</a><time datetime="2025-08-21T16:00:00.000Z" title="发表于 2025-08-22 00:00:00">2025-08-22</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2024 - 2025 By <a class="footer-bar-link" href="/" title="xiaoyunhai" target="_blank">xiaoyunhai</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">17</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">博客</div><div class="back-menu-list"><a class="back-menu-item" href="https://xiaoyunhai0.github.io/" title="我的博客"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" alt="我的博客"/><span class="back-menu-item-text">我的博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">个人导航</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://xiaoyunhai0.qzz.io/" title="导航站"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733189300_navigation.png" alt="导航站"/><span class="back-menu-item-text">导航站</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">域名邮箱</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://202221.xyz/" title="邮箱入口"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733194126_email.png" alt="邮箱入口"/><span class="back-menu-item-text">邮箱入口</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">GitHub</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://github.com/xiaoyunhai0" title="xiaoyunhai0"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733184061_github.png" alt="xiaoyunhai0"/><span class="back-menu-item-text">xiaoyunhai0</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">图床</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://443222.xyz/" title="XiaoyunImgHub"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757810469484_ImgBed.png" alt="XiaoyunImgHub"/><span class="back-menu-item-text">XiaoyunImgHub</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Addressables/" style="font-size: 0.88rem;">Addressables<sup>1</sup></a><a href="/tags/Cloudflare/" style="font-size: 0.88rem;">Cloudflare<sup>1</sup></a><a href="/tags/DOTween/" style="font-size: 0.88rem;">DOTween<sup>1</sup></a><a href="/tags/Depth-to-Mesh/" style="font-size: 0.88rem;">Depth-to-Mesh<sup>1</sup></a><a href="/tags/Endless-Runner/" style="font-size: 0.88rem;">Endless Runner<sup>1</sup></a><a href="/tags/GitHub/" style="font-size: 0.88rem;">GitHub<sup>1</sup></a><a href="/tags/Hexo/" style="font-size: 0.88rem;">Hexo<sup>1</sup></a><a href="/tags/IL2CPP/" style="font-size: 0.88rem;">IL2CPP<sup>1</sup></a><a href="/tags/Komari/" style="font-size: 0.88rem;">Komari<sup>1</sup></a><a href="/tags/Lua/" style="font-size: 0.88rem;">Lua<sup>1</sup></a><a href="/tags/Multi-Display-Projection/" style="font-size: 0.88rem;">Multi-Display Projection<sup>1</sup></a><a href="/tags/Nginx/" style="font-size: 0.88rem;">Nginx<sup>1</sup></a><a href="/tags/Object-Pool/" style="font-size: 0.88rem;">Object Pool<sup>1</sup></a><a href="/tags/Orbbec-Astra/" style="font-size: 0.88rem;">Orbbec Astra<sup>1</sup></a><a href="/tags/Perlin-Noise/" style="font-size: 0.88rem;">Perlin Noise<sup>1</sup></a><a href="/tags/Procedural-Generation/" style="font-size: 0.88rem;">Procedural Generation<sup>1</sup></a><a href="/tags/ROI-Calibration/" style="font-size: 0.88rem;">ROI Calibration<sup>1</sup></a><a href="/tags/Real-time-Agents/" style="font-size: 0.88rem;">Real-time Agents<sup>1</sup></a><a href="/tags/SSH/" style="font-size: 0.88rem;">SSH<sup>1</sup></a><a href="/tags/Shader-Parameter-Hub/" style="font-size: 0.88rem;">Shader Parameter Hub<sup>1</sup></a><a href="/tags/TMP/" style="font-size: 0.88rem;">TMP<sup>1</sup></a><a href="/tags/Unity/" style="font-size: 0.88rem;">Unity<sup>4</sup></a><a href="/tags/WheelCollider/" style="font-size: 0.88rem;">WheelCollider<sup>1</sup></a><a href="/tags/Windows/" style="font-size: 0.88rem;">Windows<sup>1</sup></a><a href="/tags/xLua/" style="font-size: 0.88rem;">xLua<sup>2</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/" style="font-size: 0.88rem;">写作<sup>1</sup></a><a href="/tags/%E5%8D%8F%E7%A8%8B%E5%88%86%E5%B8%A7/" style="font-size: 0.88rem;">协程分帧<sup>1</sup></a><a href="/tags/%E5%B7%A5%E5%85%B7%E9%93%BE/" style="font-size: 0.88rem;">工具链<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 0.88rem;">工程化<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E8%A7%84%E8%8C%83/" style="font-size: 0.88rem;">工程规范<sup>1</sup></a><a href="/tags/%E6%8E%A2%E9%92%88/" style="font-size: 0.88rem;">探针<sup>1</sup></a><a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 0.88rem;">插件<sup>1</sup></a><a href="/tags/%E6%A1%86%E6%9E%B6/" style="font-size: 0.88rem;">框架<sup>1</sup></a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/" style="font-size: 0.88rem;">热更新<sup>1</sup></a><a href="/tags/%E8%AF%AD%E6%B3%95/" style="font-size: 0.88rem;">语法<sup>1</sup></a><a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 0.88rem;">部署<sup>1</sup></a><a href="/tags/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/" style="font-size: 0.88rem;">项目结构<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.5"></meting-js></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="is-center" id="loading-database"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-pulse-icon"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("02/22/2024 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2024 By 安知鱼 V1.6.14",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 xiaoyunhai 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
