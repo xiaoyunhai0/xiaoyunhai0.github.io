@@ -1,0 +1,445 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>Git Push&amp;Pull 使用 SSH（含 443 端口）配置 | 霄云海的博客</title><meta name="keywords" content="SSH,GitHub,Windows"><meta name="author" content="xiaoyunhai"><meta name="copyright" content="xiaoyunhai"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="Git Push&amp;Pull 使用 SSH（含 443 端口）配置"><meta name="application-name" content="Git Push&amp;Pull 使用 SSH（含 443 端口）配置"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="Git Push&amp;Pull 使用 SSH（含 443 端口）配置"><meta property="og:url" content="https://xiaoyunhai0.github.io/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/index.html"><meta property="og:site_name" content="霄云海的博客"><meta property="og:description" content="从零配置 Git SSH，到端口 22 被封转 443、代理残留、VS Code 干扰等全链路排错。给出逐行注释的命令、远程地址迁移与批量脚本。"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://443222.xyz/file/Blog/article/1757683772501_6.png"><meta property="article:author" content="xiaoyunhai"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://443222.xyz/file/Blog/article/1757683772501_6.png"><meta name="description" content="从零配置 Git SSH，到端口 22 被封转 443、代理残留、VS Code 干扰等全链路排错。给出逐行注释的命令、远程地址迁移与批量脚本。"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://xiaoyunhai0.github.io/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2024/07/27/125766904/ba62475f396df9de3316a08ed9e65d86_5680958632268053399..png"},
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "custom",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: xiaoyunhai","link":"链接: ","source":"来源: 霄云海的博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: '霄云海的博客',
+  title: 'Git Push&Pull 使用 SSH（含 443 端口）配置',
+  postAI: '',
+  pageFillDescription: '一、HTTPS vs SSH：为什么要改用 SSH？, 二、清理任何代理残留（极重要）, 3.2 如无则新建（推荐 Ed25519）, 四、启动 ssh-agent 并加载私钥（Windows）, 五、把公钥添加到 GitHub, 六、端口 22 被封怎么办？——走 ssh.github.com443, 6.1 创建x2F编辑 ~/.ssh/config（无扩展名的 config）, 6.2 验证配置是否生效, 6.3 连通性测试, 七、把仓库远程从 HTTPS 改为 SSH（每个仓库都要改）, 7.1 单个仓库修改, 7.2 批量修改（可选）, 八、Hexo 部署改用 SSH（避免 HTTPSx2FPAT）, 九、常见报错与对症一条命令, 1) Failed to connect to 127.0.0.17890 x2F Proxy CONNECT aborted, 2) ssh connect to host github.com port 22 Connection timed out, 3) Host key verification failed, 4) Permission denied (publickey), 5) VS Code 仍报 https//github.com/..., 十、最终检查清单（一次通过）, 附：遇到必须用 HTTPS的环境怎么办？适用系统内置目标完全摆脱代理让走若端口被封改走一为什么要改用简单但在受限网络下常被拦直连也可能被深度检查且需要凭证管理器或更稳可用绕过封锁配好一次所有仓库免输密码二清理任何代理残留极重要很多人连不通其实是还在走的代理先清空取消全局代理取消全局代理在仓库目录里取消本仓库代理在仓库目录里取消本仓库代理里也要清空搜索留空并重启三准备密钥有就复用检查是否已有密钥查看是否已有若存在打印公钥内容以便复制如无则新建推荐你的邮箱按回车使用默认路径四启动并加载私钥将代理设为开机自启只需一次启动代理服务已启动会提示已在运行加载私钥到若用改文件名列出已加载的密钥确认成功五把公钥添加到复制公钥内容或粘贴保存六端口被封怎么办走创建编辑无扩展名的打开或新建配置文件确保不是写入最小可用配置完整粘贴保存指向的域名走端口绕过的封锁或按你实际密钥修改验证配置是否生效期望输出包含指向你的私钥连通性测试直测首次会提示输入常规域名测试此时会按走出现你的用户名即成功若仍去连多半是被保存成了务必改回无扩展名的并重测七把仓库远程从改为每个仓库都要改单个仓库修改进入仓库根目录例如你的用户名你的仓库名确认已变成形式拉取测试推送测试分支名按实际替换批量修改可选脚本保存为遍历这些本地仓库目录自动把改为使用方法在中到脚本所在目录然后八部署改用避免站点根目录的注意是站点级非主题你的用户名你的仓库或按你的设置发布流程清理生成静态文件通过推送到九常见报错与对症一条命令原因仍在走本机代理端口不存在或协议不匹配解决清理代理见第二章或改用原因端口被封或未生效解决按第六章使用用核对端口是否为检查不是原因首次连接缺少或里记录不匹配解决重新连接看到提示时输入若冲突编辑删除对应行再连原因未添加你的公钥或未加载私钥解决把添加到执行私钥路径用确认已加载仍报原因仓库远程还是或注入了代理解决在仓库里执行你仓库然后在置空命令面板确认日志使用形式十最终检查清单一次通过应为指向你的私钥成功提示每个仓库远程应为拉取无误推送无误附遇到必须用的环境怎么办极个别企业网络强制临时切回你仓库并使用或个人访问令牌或在里通过代理转发需要额外工具如一般不推荐复杂度高一次配置处处生效关键点只有三个走中有你的私钥每个仓库的用做到这三步将长期稳定',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-08-22 00:00:00',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><div class="back-home-button"><i class="anzhiyufont anzhiyu-icon-grip-vertical"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">博客</div><div class="back-menu-list"><a class="back-menu-item" href="https://xiaoyunhai0.github.io/" title="我的博客"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" alt="我的博客"/><span class="back-menu-item-text">我的博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">个人导航</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://xiaoyunhai0.qzz.io/" title="导航站"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733189300_navigation.png" alt="导航站"/><span class="back-menu-item-text">导航站</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">域名邮箱</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://202221.xyz/" title="邮箱入口"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733194126_email.png" alt="邮箱入口"/><span class="back-menu-item-text">邮箱入口</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">GitHub</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://github.com/xiaoyunhai0" title="xiaoyunhai0"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733184061_github.png" alt="xiaoyunhai0"/><span class="back-menu-item-text">xiaoyunhai0</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">图床</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://443222.xyz/" title="XiaoyunImgHub"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757810469484_ImgBed.png" alt="XiaoyunImgHub"/><span class="back-menu-item-text">XiaoyunImgHub</span></a></div></div></div></div><a id="site-name" href="/" accesskey="h"><div class="title">霄云海的博客</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button only-home" id="travellings_button" title="随机前往一个开往项目网站"><a class="site-page" onclick="anzhiyu.totraveling()" title="随机前往一个开往项目网站" href="javascript:void(0);" rel="external nofollow" data-pjax-state="external"><i class="anzhiyufont anzhiyu-icon-train"></i></a></div><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://443222.xyz/file/Blog/QRcode/1757683727199_wxplus.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://443222.xyz/file/Blog/QRcode/1757683727199_wxplus.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://443222.xyz/file/Blog/QRcode/1757683737440_zfbplus.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://443222.xyz/file/Blog/QRcode/1757683737440_zfbplus.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI-Commentary/" style="font-size: 1.05rem;">AI Commentary<sup>1</sup></a><a href="/tags/Addressables/" style="font-size: 1.05rem;">Addressables<sup>2</sup></a><a href="/tags/Cloudflare/" style="font-size: 1.05rem;">Cloudflare<sup>1</sup></a><a href="/tags/DOTween/" style="font-size: 1.05rem;">DOTween<sup>1</sup></a><a href="/tags/Debian/" style="font-size: 1.05rem;">Debian<sup>1</sup></a><a href="/tags/Depth-to-Mesh/" style="font-size: 1.05rem;">Depth-to-Mesh<sup>1</sup></a><a href="/tags/Dissonance/" style="font-size: 1.05rem;">Dissonance<sup>1</sup></a><a href="/tags/Endless-Runner/" style="font-size: 1.05rem;">Endless Runner<sup>1</sup></a><a href="/tags/GitHub/" style="font-size: 1.05rem;">GitHub<sup>1</sup></a><a href="/tags/Guandan/" style="font-size: 1.05rem;">Guandan<sup>1</sup></a><a href="/tags/Hexo/" style="font-size: 1.05rem;">Hexo<sup>1</sup></a><a href="/tags/IL2CPP/" style="font-size: 1.05rem;">IL2CPP<sup>1</sup></a><a href="/tags/Komari/" style="font-size: 1.05rem;">Komari<sup>1</sup></a><a href="/tags/Lua/" style="font-size: 1.05rem;">Lua<sup>1</sup></a><a href="/tags/Mirror/" style="font-size: 1.05rem;">Mirror<sup>1</sup></a><a href="/tags/Multi-Display-Projection/" style="font-size: 1.05rem;">Multi-Display Projection<sup>1</sup></a><a href="/tags/Nginx/" style="font-size: 1.05rem;">Nginx<sup>2</sup></a><a href="/tags/Object-Pool/" style="font-size: 1.05rem;">Object Pool<sup>1</sup></a><a href="/tags/Orbbec-Astra/" style="font-size: 1.05rem;">Orbbec Astra<sup>1</sup></a><a href="/tags/Perlin-Noise/" style="font-size: 1.05rem;">Perlin Noise<sup>1</sup></a><a href="/tags/Procedural-Generation/" style="font-size: 1.05rem;">Procedural Generation<sup>1</sup></a><a href="/tags/ROI-Calibration/" style="font-size: 1.05rem;">ROI Calibration<sup>1</sup></a><a href="/tags/Real-time-Agents/" style="font-size: 1.05rem;">Real-time Agents<sup>1</sup></a><a href="/tags/SSH/" style="font-size: 1.05rem;">SSH<sup>1</sup></a><a href="/tags/Shader-Parameter-Hub/" style="font-size: 1.05rem;">Shader Parameter Hub<sup>1</sup></a><a href="/tags/TMP/" style="font-size: 1.05rem;">TMP<sup>1</sup></a><a href="/tags/Unity/" style="font-size: 1.05rem;">Unity<sup>4</sup></a><a href="/tags/WheelCollider/" style="font-size: 1.05rem;">WheelCollider<sup>1</sup></a><a href="/tags/Windows/" style="font-size: 1.05rem;">Windows<sup>1</sup></a><a href="/tags/xLua/" style="font-size: 1.05rem;">xLua<sup>2</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/" style="font-size: 1.05rem;">写作<sup>1</sup></a><a href="/tags/%E5%8D%8F%E7%A8%8B%E5%88%86%E5%B8%A7/" style="font-size: 1.05rem;">协程分帧<sup>1</sup></a><a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/" style="font-size: 1.05rem;">命令行<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 1.05rem;">工程化<sup>1</sup></a><a href="/tags/%E6%8E%A2%E9%92%88/" style="font-size: 1.05rem;">探针<sup>1</sup></a><a href="/tags/%E6%A1%86%E6%9E%B6/" style="font-size: 1.05rem;">框架<sup>1</sup></a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/" style="font-size: 1.05rem;">热更新<sup>1</sup></a><a href="/tags/%E8%AF%AD%E6%B3%95/" style="font-size: 1.05rem;">语法<sup>1</sup></a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.05rem;">运维<sup>1</sup></a><a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 1.05rem;">部署<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/03/"><span class="card-archive-list-date">三月 2026</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/11/"><span class="card-archive-list-date">十一月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/08/"><span class="card-archive-list-date">八月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/07/"><span class="card-archive-list-date">七月 2025</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%99%E7%A8%8B/" itemprop="url">教程</a><i class="anzhiyufont anzhiyu-icon-angle-right post-meta-separator"></i><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%99%E7%A8%8B/Git/" itemprop="url">Git</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/SSH/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>SSH</span></a><a class="article-meta__tags" href="/tags/GitHub/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>GitHub</span></a><a class="article-meta__tags" href="/tags/Windows/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>Windows</span></a></span></div></div><h1 class="post-title" itemprop="name headline">Git Push&amp;Pull 使用 SSH（含 443 端口）配置</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2025-08-21T16:00:00.000Z" title="发表于 2025-08-22 00:00:00">2025-08-22</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2025-08-21T16:00:00.000Z" title="更新于 2025-08-22 00:00:00">2025-08-22</time></span></div><div class="meta-secondline"><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为南京"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>南京</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://443222.xyz/file/Blog/article/1757683772501_6.png"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://xiaoyunhai0.github.io/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/"><header><a class="post-meta-categories" href="/categories/%E6%95%99%E7%A8%8B/" itemprop="url">教程</a><a class="post-meta-categories" href="/categories/%E6%95%99%E7%A8%8B/Git/" itemprop="url">Git</a><a href="/tags/SSH/" tabindex="-1" itemprop="url">SSH</a><a href="/tags/GitHub/" tabindex="-1" itemprop="url">GitHub</a><a href="/tags/Windows/" tabindex="-1" itemprop="url">Windows</a><h1 id="CrawlerTitle" itemprop="name headline">Git Push&amp;Pull 使用 SSH（含 443 端口）配置</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">xiaoyunhai</span><time itemprop="dateCreated datePublished" datetime="2025-08-21T16:00:00.000Z" title="发表于 2025-08-22 00:00:00">2025-08-22</time><time itemprop="dateCreated datePublished" datetime="2025-08-21T16:00:00.000Z" title="更新于 2025-08-22 00:00:00">2025-08-22</time></header><blockquote>
+<p>适用系统：Windows 10&#x2F;11（内置 OpenSSH）。<br>目标：<strong>完全摆脱代理</strong>，让 Git 走 SSH；若 22 端口被封，改走 <strong>ssh.github.com:443</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="一、HTTPS-vs-SSH：为什么要改用-SSH？"><a href="#一、HTTPS-vs-SSH：为什么要改用-SSH？" class="headerlink" title="一、HTTPS vs SSH：为什么要改用 SSH？"></a>一、HTTPS vs SSH：为什么要改用 SSH？</h2><ul>
+<li><strong>HTTPS</strong>：简单，但在受限网络下常被拦（443 直连也可能被深度检查），且需要凭证管理器或 PAT。  </li>
+<li><strong>SSH</strong>：更稳，可用 <code>ssh.github.com:443</code> 绕过 22 封锁；配好一次，所有仓库免输密码。</li>
+</ul>
+<hr>
+<h2 id="二、清理任何“代理残留”（极重要）"><a href="#二、清理任何“代理残留”（极重要）" class="headerlink" title="二、清理任何“代理残留”（极重要）"></a>二、清理任何“代理残留”（极重要）</h2><p>很多人 Git 连不通，其实是还在走 <code>127.0.0.1:7890/57890</code> 的<strong>HTTP&#x2F;SOCKS 代理</strong>。先清空：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset http.proxy    &amp; <span class="built_in">rem</span> 取消全局 HTTP 代理</span><br><span class="line">git config --global --unset https.proxy   &amp; <span class="built_in">rem</span> 取消全局 HTTPS 代理</span><br><span class="line">git config --unset http.proxy             &amp; <span class="built_in">rem</span> 在仓库目录里，取消本仓库 HTTP 代理</span><br><span class="line">git config --unset https.proxy            &amp; <span class="built_in">rem</span> 在仓库目录里，取消本仓库 HTTPS 代理</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">&gt; VS Code 里也要清空：**Settings → 搜索 proxy → Http: Proxy** 留空并重启 VS Code。</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## 三、准备 SSH 密钥（有就复用）</span><br><span class="line"></span><br><span class="line">### <span class="number">3</span>.<span class="number">1</span> 检查是否已有密钥</span><br><span class="line"></span><br><span class="line">```<span class="built_in">cmd</span></span><br><span class="line"><span class="built_in">dir</span> <span class="variable">%USERPROFILE%</span>\.ssh                 &amp; <span class="built_in">rem</span> 查看是否已有 id_rsa / id_ed25519</span><br><span class="line"><span class="built_in">type</span> <span class="variable">%USERPROFILE%</span>\.ssh\id_rsa.pub     &amp; <span class="built_in">rem</span> 若存在，打印公钥内容以便复制</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-如无则新建（推荐-Ed25519）"><a href="#3-2-如无则新建（推荐-Ed25519）" class="headerlink" title="3.2 如无则新建（推荐 Ed25519）"></a>3.2 如无则新建（推荐 Ed25519）</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C &quot;你的邮箱&quot;    &amp; <span class="built_in">rem</span> 按回车使用默认路径 ~/.ssh/id_ed25519</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、启动-ssh-agent-并加载私钥（Windows）"><a href="#四、启动-ssh-agent-并加载私钥（Windows）" class="headerlink" title="四、启动 ssh-agent 并加载私钥（Windows）"></a>四、启动 ssh-agent 并加载私钥（Windows）</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sc config ssh-agent <span class="built_in">start</span>=auto         &amp; <span class="built_in">rem</span> 将 OpenSSH 代理设为开机自启（只需一次）</span><br><span class="line"><span class="built_in">net</span> <span class="built_in">start</span> ssh-agent                    &amp; <span class="built_in">rem</span> 启动代理服务（已启动会提示“已在运行”）</span><br><span class="line">ssh-add <span class="variable">%USERPROFILE%</span>\.ssh\id_rsa      &amp; <span class="built_in">rem</span> 加载私钥到 agent；若用 ed25519 改文件名</span><br><span class="line">ssh-add -l                             &amp; <span class="built_in">rem</span> 列出已加载的密钥，确认成功</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、把公钥添加到-GitHub"><a href="#五、把公钥添加到-GitHub" class="headerlink" title="五、把公钥添加到 GitHub"></a>五、把公钥添加到 GitHub</h2><ol>
+<li>复制公钥内容：<code>type %USERPROFILE%\.ssh\id_rsa.pub</code>（或 <code>id_ed25519.pub</code>）。</li>
+<li>GitHub → <strong>Settings → SSH and GPG keys → New SSH key</strong> → 粘贴保存。</li>
+</ol>
+<hr>
+<h2 id="六、端口-22-被封怎么办？——走-ssh-github-com-443"><a href="#六、端口-22-被封怎么办？——走-ssh-github-com-443" class="headerlink" title="六、端口 22 被封怎么办？——走 ssh.github.com:443"></a>六、端口 22 被封怎么办？——走 <code>ssh.github.com:443</code></h2><h3 id="6-1-创建-编辑-ssh-config（无扩展名的-config）"><a href="#6-1-创建-编辑-ssh-config（无扩展名的-config）" class="headerlink" title="6.1 创建&#x2F;编辑 ~/.ssh/config（无扩展名的 config）"></a>6.1 创建&#x2F;编辑 <code>~/.ssh/config</code>（<strong>无扩展名</strong>的 <code>config</code>）</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">notepad <span class="variable">%USERPROFILE%</span>\.ssh\config      &amp; <span class="built_in">rem</span> 打开或新建配置文件（确保不是 config.txt）</span><br></pre></td></tr></table></figure>
+
+<p>写入<strong>最小可用配置</strong>（完整粘贴，保存）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">  HostName ssh.github.com      # 指向 GitHub 的 SSH-Over-HTTPS 域名</span><br><span class="line">  Port 443                     # 走 443 端口，绕过 22 的封锁</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa   # 或 ~/.ssh/id_ed25519 按你实际密钥修改</span><br><span class="line">  ServerAliveInterval 60</span><br><span class="line">  ServerAliveCountMax 120</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-验证配置是否生效"><a href="#6-2-验证配置是否生效" class="headerlink" title="6.2 验证配置是否生效"></a>6.2 验证配置是否生效</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -G github.com | <span class="built_in">findstr</span> /I &quot;hostname port identityfile&quot;</span><br><span class="line"><span class="comment">rem 期望输出包含：hostname ssh.github.com / port 443 / identityfile 指向你的私钥</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-连通性测试"><a href="#6-3-连通性测试" class="headerlink" title="6.3 连通性测试"></a>6.3 连通性测试</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -T -p <span class="number">443</span> git@ssh.github.com      &amp; <span class="built_in">rem</span> 直测 <span class="number">443</span>：首次会提示 yes/no，输入 yes</span><br><span class="line">ssh -T git@github.com                 &amp; <span class="built_in">rem</span> 常规域名测试，此时会按 config 走 <span class="number">443</span></span><br></pre></td></tr></table></figure>
+
+<p>出现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hi &lt;你的 GitHub 用户名&gt;! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<p>即成功。</p>
+<blockquote>
+<p>若 <code>ssh -T git@github.com</code> 仍去连 22，多半是 <strong>config 被保存成了 config.txt</strong>，务必改回<strong>无扩展名</strong>的 <code>config</code> 并重测。</p>
+</blockquote>
+<hr>
+<h2 id="七、把仓库远程从-HTTPS-改为-SSH（每个仓库都要改）"><a href="#七、把仓库远程从-HTTPS-改为-SSH（每个仓库都要改）" class="headerlink" title="七、把仓库远程从 HTTPS 改为 SSH（每个仓库都要改）"></a>七、把仓库远程从 HTTPS 改为 SSH（每个仓库都要改）</h2><h3 id="7-1-单个仓库修改"><a href="#7-1-单个仓库修改" class="headerlink" title="7.1 单个仓库修改"></a>7.1 单个仓库修改</h3><p>进入<strong>仓库根目录</strong>（例如 <code>E:\Blog\hexo-source</code>）：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br><span class="line">git remote <span class="built_in">set</span>-url origin git@github.com:&lt;你的用户名&gt;/&lt;你的仓库名&gt;.git</span><br><span class="line">git remote -v                          &amp; <span class="built_in">rem</span> 确认已变成 git@github.com:... 形式</span><br><span class="line">git fetch origin                       &amp; <span class="built_in">rem</span> 拉取测试</span><br><span class="line">git push -u origin main                &amp; <span class="built_in">rem</span> 推送测试（分支名按实际替换）</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-批量修改（可选）"><a href="#7-2-批量修改（可选）" class="headerlink" title="7.2 批量修改（可选）"></a>7.2 批量修改（可选）</h3><p><strong>PowerShell</strong> 脚本（保存为 <code>rewrite-https-to-ssh.ps1</code>）：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 遍历这些本地仓库目录，自动把 https://github.com/xxx 改为 git@github.com:xxx</span></span><br><span class="line"><span class="comment"># 使用方法：在 PowerShell 中 cd 到脚本所在目录，然后：.\rewrite-https-to-ssh.ps1</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$repos</span> = <span class="selector-tag">@</span>(</span><br><span class="line">  <span class="string">&quot;E:\Blog\hexo-source&quot;</span>,</span><br><span class="line">  <span class="string">&quot;E:\OtherProject&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$repo</span> <span class="keyword">in</span> <span class="variable">$repos</span>) &#123;</span><br><span class="line">  <span class="built_in">Write-Host</span> <span class="string">&quot;==== Fixing <span class="variable">$repo</span> ====&quot;</span></span><br><span class="line">  <span class="built_in">Set-Location</span> <span class="variable">$repo</span></span><br><span class="line">  <span class="variable">$old</span> = git remote <span class="built_in">get-url</span> origin</span><br><span class="line">  <span class="variable">$new</span> = <span class="variable">$old</span> <span class="operator">-replace</span> <span class="string">&#x27;^https://github.com/&#x27;</span>, <span class="string">&#x27;git@github.com:&#x27;</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="variable">$old</span> <span class="operator">-ne</span> <span class="variable">$new</span>) &#123;</span><br><span class="line">    git remote <span class="built_in">set-url</span> origin <span class="variable">$new</span></span><br><span class="line">    git remote <span class="literal">-v</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">Write-Host</span> <span class="string">&quot;No change needed.&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、Hexo-部署改用-SSH（避免-HTTPS-PAT）"><a href="#八、Hexo-部署改用-SSH（避免-HTTPS-PAT）" class="headerlink" title="八、Hexo 部署改用 SSH（避免 HTTPS&#x2F;PAT）"></a>八、Hexo 部署改用 SSH（避免 HTTPS&#x2F;PAT）</h2><p>站点根目录的 <code>_config.yml</code>（注意是<strong>站点级</strong>，非主题）：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span>                  <span class="comment"># hexo-deployer-git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:&lt;你的用户名&gt;/&lt;你的</span> <span class="string">pages</span> <span class="string">仓库&gt;.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span>               <span class="comment"># 或 gh-pages，按你的 Pages 设置</span></span><br></pre></td></tr></table></figure>
+
+<p>发布流程：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean   &amp; <span class="built_in">rem</span> 清理</span><br><span class="line">hexo g       &amp; <span class="built_in">rem</span> 生成静态文件</span><br><span class="line">hexo d       &amp; <span class="built_in">rem</span> 通过 SSH 推送到 repo</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、常见报错与“对症一条命令”"><a href="#九、常见报错与“对症一条命令”" class="headerlink" title="九、常见报错与“对症一条命令”"></a>九、常见报错与“对症一条命令”</h2><h3 id="1-Failed-to-connect-to-127-0-0-1-7890-Proxy-CONNECT-aborted"><a href="#1-Failed-to-connect-to-127-0-0-1-7890-Proxy-CONNECT-aborted" class="headerlink" title="1) Failed to connect to 127.0.0.1:7890 &#x2F; Proxy CONNECT aborted"></a>1) <code>Failed to connect to 127.0.0.1:7890</code> &#x2F; <code>Proxy CONNECT aborted</code></h3><ul>
+<li><strong>原因</strong>：Git 仍在走本机代理（端口不存在或协议不匹配）。</li>
+<li><strong>解决</strong>：清理代理（见第二章），或改用 SSH。</li>
+</ul>
+<h3 id="2-ssh-connect-to-host-github-com-port-22-Connection-timed-out"><a href="#2-ssh-connect-to-host-github-com-port-22-Connection-timed-out" class="headerlink" title="2) ssh: connect to host github.com port 22: Connection timed out"></a>2) <code>ssh: connect to host github.com port 22: Connection timed out</code></h3><ul>
+<li><strong>原因</strong>：22 端口被封，或 config 未生效。</li>
+<li><strong>解决</strong>：按第六章使用 <code>ssh.github.com:443</code>；用 <code>ssh -G github.com</code> 核对端口是否为 443；检查 <code>~/.ssh/config</code> <strong>不是</strong> <code>config.txt</code>。</li>
+</ul>
+<h3 id="3-Host-key-verification-failed"><a href="#3-Host-key-verification-failed" class="headerlink" title="3) Host key verification failed"></a>3) <code>Host key verification failed</code></h3><ul>
+<li><strong>原因</strong>：首次连接缺少 host key 或 <code>known_hosts</code> 里记录不匹配。</li>
+<li><strong>解决</strong>：重新连接，看到提示时输入 <code>yes</code>；若冲突，编辑 <code>%USERPROFILE%\.ssh\known_hosts</code> 删除对应行再连。</li>
+</ul>
+<h3 id="4-Permission-denied-publickey"><a href="#4-Permission-denied-publickey" class="headerlink" title="4) Permission denied (publickey)"></a>4) <code>Permission denied (publickey)</code></h3><ul>
+<li><strong>原因</strong>：GitHub 未添加你的公钥，或 <code>ssh-agent</code> 未加载私钥。</li>
+<li><strong>解决</strong>：把 <code>id_rsa.pub</code>&#x2F;<code>id_ed25519.pub</code> 添加到 GitHub；执行 <code>ssh-add &lt;私钥路径&gt;</code>；用 <code>ssh-add -l</code> 确认已加载。</li>
+</ul>
+<h3 id="5-VS-Code-仍报-https-github-com"><a href="#5-VS-Code-仍报-https-github-com" class="headerlink" title="5) VS Code 仍报 https://github.com/..."></a>5) VS Code 仍报 <code>https://github.com/...</code></h3><ul>
+<li><p><strong>原因</strong>：仓库远程还是 HTTPS，或 VS Code 注入了代理。</p>
+</li>
+<li><p><strong>解决</strong>：在仓库里执行</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote <span class="built_in">set</span>-url origin git@github.com:&lt;你&gt;/&lt;仓库&gt;.git</span><br></pre></td></tr></table></figure>
+
+<p>然后在 VS Code：<strong>Settings → Http: Proxy</strong> 置空，命令面板 <strong>“Git: Show Git Output”</strong> 确认日志使用 <code>git@github.com:</code> 形式。</p>
+</li>
+</ul>
+<hr>
+<h2 id="十、最终检查清单（一次通过）"><a href="#十、最终检查清单（一次通过）" class="headerlink" title="十、最终检查清单（一次通过）"></a>十、最终检查清单（一次通过）</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ssh -G github.com | <span class="built_in">findstr</span> /I &quot;hostname port identityfile&quot;  &amp; <span class="built_in">rem</span> 应为 ssh.github.com / <span class="number">443</span> / 指向你的私钥</span><br><span class="line">ssh -T git@github.com                                        &amp; <span class="built_in">rem</span> 成功提示 You&#x27;ve successfully authenticated...</span><br><span class="line">git remote -v                                                &amp; <span class="built_in">rem</span> 每个仓库远程应为 git@github.com:...</span><br><span class="line">git fetch origin                                             &amp; <span class="built_in">rem</span> 拉取无误</span><br><span class="line">git push -u origin &lt;branch&gt;                                  &amp; <span class="built_in">rem</span> 推送无误</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="附：遇到“必须用-HTTPS”的环境怎么办？"><a href="#附：遇到“必须用-HTTPS”的环境怎么办？" class="headerlink" title="附：遇到“必须用 HTTPS”的环境怎么办？"></a>附：遇到“必须用 HTTPS”的环境怎么办？</h2><p>极个别企业网络强制 HTTPS：</p>
+<ul>
+<li>临时切回 HTTPS：<code>git remote set-url origin https://github.com/&lt;你&gt;/&lt;仓库&gt;.git</code>，并使用 Git Credential Manager（或个人访问令牌 PAT）。</li>
+<li>或在 <code>~/.ssh/config</code> 里通过 <strong>HTTP CONNECT 代理</strong>转发 SSH（需要额外工具，如 netcat&#x2F;proxytunnel；一般不推荐，复杂度高）。</li>
+</ul>
+<hr>
+<p><strong>SSH 一次配置，处处生效</strong>。关键点只有三个——</p>
+<ol>
+<li><code>~/.ssh/config</code> 走 <code>ssh.github.com:443</code>；</li>
+<li><code>ssh-agent</code> 中有你的私钥；</li>
+<li>每个仓库的 <code>origin</code> 用 <code>git@github.com:...</code>。<br>做到这三步，Git push&#x2F;pull 将长期稳定。</li>
+</ol>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" title="头像" alt="头像"><img class="post-copyright__author_img_front" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" title="头像" alt="头像"></a><div class="post-copyright__author_name">xiaoyunhai</div><div class="post-copyright__author_desc">记录·折腾·输出</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://xiaoyunhai0.github.io/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://xiaoyunhai0.github.io/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/')">Git Push&amp;Pull 使用 SSH（含 443 端口）配置</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="https://443222.xyz/file/Blog/QRcode/1757683727199_wxplus.png" target="_blank"><img class="post-qr-code-img" src="https://443222.xyz/file/Blog/QRcode/1757683727199_wxplus.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://443222.xyz/file/Blog/QRcode/1757683737440_zfbplus.png" target="_blank"><img class="post-qr-code-img" src="https://443222.xyz/file/Blog/QRcode/1757683737440_zfbplus.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://xiaoyunhai0.github.io/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=Git Push&amp;Pull 使用 SSH（含 443 端口）配置&amp;url=https://xiaoyunhai0.github.io/2025/08/22/Git%E4%BD%BF%E7%94%A8SSH%E7%9A%84Push%E5%92%8CPull/&amp;pic=https://443222.xyz/file/Blog/article/1757683772501_6.png" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://xiaoyunhai0.github.io" target="_blank">霄云海的博客</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/SSH/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>SSH<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/GitHub/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>GitHub<span class="tagsPageCount">1</span></a><a class="post-meta__box__tags" href="/tags/Windows/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>Windows<span class="tagsPageCount">1</span></a></div></div></div><div class="post_share"><div class="social-share" data-image="https://443222.xyz/file/Blog/article/1762154909035_19.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/08/20/ARSandBox/"><img class="prev-cover" src="https://443222.xyz/file/Blog/article/1757683784467_8.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">AR Sandbox Projection · 工程复盘（独立开发）</div></div></a></div><div class="next-post pull-right"><a href="/2025/10/01/unity%E5%B8%B8%E7%94%A8%E5%B7%A5%E7%A8%8B%E7%9B%AE%E5%BD%95/"><img class="next-cover" src="https://443222.xyz/file/Blog/article/1762154920988_11.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Unity 常用工程目录结构与实践</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description">这里是霄云海的个人博客，记录开发与生活。</div></div></div><div class="card-widget anzhiyu-right-widget" id="card-wechat" onclick="null"><div id="flip-wrapper"><div id="flip-content"><div class="face" style="background: url(https://bu.dusays.com/2023/01/13/63c02edf44033.png) center center / 100% no-repeat"></div><div class="back face" style="background: url(https://bu.dusays.com/2023/05/13/645fa415e8694.png) center center / 100% no-repeat"></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81HTTPS-vs-SSH%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%94%B9%E7%94%A8-SSH%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">一、HTTPS vs SSH：为什么要改用 SSH？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%B8%85%E7%90%86%E4%BB%BB%E4%BD%95%E2%80%9C%E4%BB%A3%E7%90%86%E6%AE%8B%E7%95%99%E2%80%9D%EF%BC%88%E6%9E%81%E9%87%8D%E8%A6%81%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">二、清理任何“代理残留”（极重要）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%A6%82%E6%97%A0%E5%88%99%E6%96%B0%E5%BB%BA%EF%BC%88%E6%8E%A8%E8%8D%90-Ed25519%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">3.2 如无则新建（推荐 Ed25519）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%90%AF%E5%8A%A8-ssh-agent-%E5%B9%B6%E5%8A%A0%E8%BD%BD%E7%A7%81%E9%92%A5%EF%BC%88Windows%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">四、启动 ssh-agent 并加载私钥（Windows）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%8A%8A%E5%85%AC%E9%92%A5%E6%B7%BB%E5%8A%A0%E5%88%B0-GitHub"><span class="toc-number">4.</span> <span class="toc-text">五、把公钥添加到 GitHub</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%AB%AF%E5%8F%A3-22-%E8%A2%AB%E5%B0%81%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F%E2%80%94%E2%80%94%E8%B5%B0-ssh-github-com-443"><span class="toc-number">5.</span> <span class="toc-text">六、端口 22 被封怎么办？——走 ssh.github.com:443</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%88%9B%E5%BB%BA-%E7%BC%96%E8%BE%91-ssh-config%EF%BC%88%E6%97%A0%E6%89%A9%E5%B1%95%E5%90%8D%E7%9A%84-config%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">6.1 创建&#x2F;编辑 ~&#x2F;.ssh&#x2F;config（无扩展名的 config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E9%AA%8C%E8%AF%81%E9%85%8D%E7%BD%AE%E6%98%AF%E5%90%A6%E7%94%9F%E6%95%88"><span class="toc-number">5.2.</span> <span class="toc-text">6.2 验证配置是否生效</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E8%BF%9E%E9%80%9A%E6%80%A7%E6%B5%8B%E8%AF%95"><span class="toc-number">5.3.</span> <span class="toc-text">6.3 连通性测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E6%8A%8A%E4%BB%93%E5%BA%93%E8%BF%9C%E7%A8%8B%E4%BB%8E-HTTPS-%E6%94%B9%E4%B8%BA-SSH%EF%BC%88%E6%AF%8F%E4%B8%AA%E4%BB%93%E5%BA%93%E9%83%BD%E8%A6%81%E6%94%B9%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">七、把仓库远程从 HTTPS 改为 SSH（每个仓库都要改）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E5%8D%95%E4%B8%AA%E4%BB%93%E5%BA%93%E4%BF%AE%E6%94%B9"><span class="toc-number">6.1.</span> <span class="toc-text">7.1 单个仓库修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E6%89%B9%E9%87%8F%E4%BF%AE%E6%94%B9%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number">6.2.</span> <span class="toc-text">7.2 批量修改（可选）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81Hexo-%E9%83%A8%E7%BD%B2%E6%94%B9%E7%94%A8-SSH%EF%BC%88%E9%81%BF%E5%85%8D-HTTPS-PAT%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">八、Hexo 部署改用 SSH（避免 HTTPS&#x2F;PAT）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99%E4%B8%8E%E2%80%9C%E5%AF%B9%E7%97%87%E4%B8%80%E6%9D%A1%E5%91%BD%E4%BB%A4%E2%80%9D"><span class="toc-number">8.</span> <span class="toc-text">九、常见报错与“对症一条命令”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Failed-to-connect-to-127-0-0-1-7890-Proxy-CONNECT-aborted"><span class="toc-number">8.1.</span> <span class="toc-text">1) Failed to connect to 127.0.0.1:7890 &#x2F; Proxy CONNECT aborted</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-ssh-connect-to-host-github-com-port-22-Connection-timed-out"><span class="toc-number">8.2.</span> <span class="toc-text">2) ssh: connect to host github.com port 22: Connection timed out</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Host-key-verification-failed"><span class="toc-number">8.3.</span> <span class="toc-text">3) Host key verification failed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Permission-denied-publickey"><span class="toc-number">8.4.</span> <span class="toc-text">4) Permission denied (publickey)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-VS-Code-%E4%BB%8D%E6%8A%A5-https-github-com"><span class="toc-number">8.5.</span> <span class="toc-text">5) VS Code 仍报 https:&#x2F;&#x2F;github.com&#x2F;...</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E6%9C%80%E7%BB%88%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95%EF%BC%88%E4%B8%80%E6%AC%A1%E9%80%9A%E8%BF%87%EF%BC%89"><span class="toc-number">9.</span> <span class="toc-text">十、最终检查清单（一次通过）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%EF%BC%9A%E9%81%87%E5%88%B0%E2%80%9C%E5%BF%85%E9%A1%BB%E7%94%A8-HTTPS%E2%80%9D%E7%9A%84%E7%8E%AF%E5%A2%83%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-number">10.</span> <span class="toc-text">附：遇到“必须用 HTTPS”的环境怎么办？</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/03/03/Card%20Table/" title="Card Table 多人联机掼蛋系统 · 技术与功能全景复盘"><img src="https://443222.xyz/file/Blog/article/1762154909035_19.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Card Table 多人联机掼蛋系统 · 技术与功能全景复盘"/></a><div class="content"><a class="title" href="/2026/03/03/Card%20Table/" title="Card Table 多人联机掼蛋系统 · 技术与功能全景复盘">Card Table 多人联机掼蛋系统 · 技术与功能全景复盘</a><time datetime="2026-03-03T02:00:00.000Z" title="发表于 2026-03-03 10:00:00">2026-03-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/05/VPS%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C/" title="VPS 运维操作手册（统一端口与分流方案）"><img src="https://443222.xyz/file/Blog/article/1762154921269_14.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="VPS 运维操作手册（统一端口与分流方案）"/></a><div class="content"><a class="title" href="/2025/11/05/VPS%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8C/" title="VPS 运维操作手册（统一端口与分流方案）">VPS 运维操作手册（统一端口与分流方案）</a><time datetime="2025-11-05T07:18:00.000Z" title="发表于 2025-11-05 15:18:00">2025-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/03/Komari%E6%8E%A2%E9%92%88/" title="Komari 探针安装教程（Cloudflare + Nginx）"><img src="https://443222.xyz/file/Blog/article/1762154911642_22.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Komari 探针安装教程（Cloudflare + Nginx）"/></a><div class="content"><a class="title" href="/2025/11/03/Komari%E6%8E%A2%E9%92%88/" title="Komari 探针安装教程（Cloudflare + Nginx）">Komari 探针安装教程（Cloudflare + Nginx）</a><time datetime="2025-11-03T07:14:00.000Z" title="发表于 2025-11-03 15:14:00">2025-11-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/01/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C/" title="Debian / Linux 常用命令行速查"><img src="https://443222.xyz/file/Blog/article/1762154910456_21.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Debian / Linux 常用命令行速查"/></a><div class="content"><a class="title" href="/2025/11/01/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C/" title="Debian / Linux 常用命令行速查">Debian / Linux 常用命令行速查</a><time datetime="2025-11-01T07:16:00.000Z" title="发表于 2025-11-01 15:16:00">2025-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/10/Unity_Framework/" title="Unity 框架"><img src="https://443222.xyz/file/Blog/article/1762154920289_15.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Unity 框架"/></a><div class="content"><a class="title" href="/2025/10/10/Unity_Framework/" title="Unity 框架">Unity 框架</a><time datetime="2025-10-10T07:12:00.000Z" title="发表于 2025-10-10 15:12:00">2025-10-10</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2024 - 2026 By <a class="footer-bar-link" href="/" title="xiaoyunhai" target="_blank">xiaoyunhai</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">48</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">19</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">博客</div><div class="back-menu-list"><a class="back-menu-item" href="https://xiaoyunhai0.github.io/" title="我的博客"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757683801750_low_avatar.png" alt="我的博客"/><span class="back-menu-item-text">我的博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">个人导航</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://xiaoyunhai0.qzz.io/" title="导航站"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733189300_navigation.png" alt="导航站"/><span class="back-menu-item-text">导航站</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">域名邮箱</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://202221.xyz/" title="邮箱入口"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733194126_email.png" alt="邮箱入口"/><span class="back-menu-item-text">邮箱入口</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">GitHub</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://github.com/xiaoyunhai0" title="xiaoyunhai0"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757733184061_github.png" alt="xiaoyunhai0"/><span class="back-menu-item-text">xiaoyunhai0</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">图床</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://443222.xyz/" title="XiaoyunImgHub"><img class="back-menu-item-icon" src="https://443222.xyz/file/Blog/avatar/1757810469484_ImgBed.png" alt="XiaoyunImgHub"/><span class="back-menu-item-text">XiaoyunImgHub</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/AI-Commentary/" style="font-size: 0.88rem;">AI Commentary<sup>1</sup></a><a href="/tags/Addressables/" style="font-size: 0.88rem;">Addressables<sup>2</sup></a><a href="/tags/Cloudflare/" style="font-size: 0.88rem;">Cloudflare<sup>1</sup></a><a href="/tags/DOTween/" style="font-size: 0.88rem;">DOTween<sup>1</sup></a><a href="/tags/Debian/" style="font-size: 0.88rem;">Debian<sup>1</sup></a><a href="/tags/Depth-to-Mesh/" style="font-size: 0.88rem;">Depth-to-Mesh<sup>1</sup></a><a href="/tags/Dissonance/" style="font-size: 0.88rem;">Dissonance<sup>1</sup></a><a href="/tags/Endless-Runner/" style="font-size: 0.88rem;">Endless Runner<sup>1</sup></a><a href="/tags/GitHub/" style="font-size: 0.88rem;">GitHub<sup>1</sup></a><a href="/tags/Guandan/" style="font-size: 0.88rem;">Guandan<sup>1</sup></a><a href="/tags/Hexo/" style="font-size: 0.88rem;">Hexo<sup>1</sup></a><a href="/tags/IL2CPP/" style="font-size: 0.88rem;">IL2CPP<sup>1</sup></a><a href="/tags/Komari/" style="font-size: 0.88rem;">Komari<sup>1</sup></a><a href="/tags/Lua/" style="font-size: 0.88rem;">Lua<sup>1</sup></a><a href="/tags/Mirror/" style="font-size: 0.88rem;">Mirror<sup>1</sup></a><a href="/tags/Multi-Display-Projection/" style="font-size: 0.88rem;">Multi-Display Projection<sup>1</sup></a><a href="/tags/Nginx/" style="font-size: 0.88rem;">Nginx<sup>2</sup></a><a href="/tags/Object-Pool/" style="font-size: 0.88rem;">Object Pool<sup>1</sup></a><a href="/tags/Orbbec-Astra/" style="font-size: 0.88rem;">Orbbec Astra<sup>1</sup></a><a href="/tags/Perlin-Noise/" style="font-size: 0.88rem;">Perlin Noise<sup>1</sup></a><a href="/tags/Procedural-Generation/" style="font-size: 0.88rem;">Procedural Generation<sup>1</sup></a><a href="/tags/ROI-Calibration/" style="font-size: 0.88rem;">ROI Calibration<sup>1</sup></a><a href="/tags/Real-time-Agents/" style="font-size: 0.88rem;">Real-time Agents<sup>1</sup></a><a href="/tags/SSH/" style="font-size: 0.88rem;">SSH<sup>1</sup></a><a href="/tags/Shader-Parameter-Hub/" style="font-size: 0.88rem;">Shader Parameter Hub<sup>1</sup></a><a href="/tags/TMP/" style="font-size: 0.88rem;">TMP<sup>1</sup></a><a href="/tags/Unity/" style="font-size: 0.88rem;">Unity<sup>4</sup></a><a href="/tags/WheelCollider/" style="font-size: 0.88rem;">WheelCollider<sup>1</sup></a><a href="/tags/Windows/" style="font-size: 0.88rem;">Windows<sup>1</sup></a><a href="/tags/xLua/" style="font-size: 0.88rem;">xLua<sup>2</sup></a><a href="/tags/%E5%86%99%E4%BD%9C/" style="font-size: 0.88rem;">写作<sup>1</sup></a><a href="/tags/%E5%8D%8F%E7%A8%8B%E5%88%86%E5%B8%A7/" style="font-size: 0.88rem;">协程分帧<sup>1</sup></a><a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/" style="font-size: 0.88rem;">命令行<sup>1</sup></a><a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 0.88rem;">工程化<sup>1</sup></a><a href="/tags/%E6%8E%A2%E9%92%88/" style="font-size: 0.88rem;">探针<sup>1</sup></a><a href="/tags/%E6%A1%86%E6%9E%B6/" style="font-size: 0.88rem;">框架<sup>1</sup></a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/" style="font-size: 0.88rem;">热更新<sup>1</sup></a><a href="/tags/%E8%AF%AD%E6%B3%95/" style="font-size: 0.88rem;">语法<sup>1</sup></a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 0.88rem;">运维<sup>1</sup></a><a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 0.88rem;">部署<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.5"></meting-js></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="is-center" id="loading-database"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-pulse-icon"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("02/22/2024 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2024 By 安知鱼 V1.6.14",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 xiaoyunhai 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
