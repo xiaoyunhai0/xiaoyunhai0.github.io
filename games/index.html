@@ -3,25 +3,94 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f4f1eb">
+    <meta name="theme-color" content="#f7f9fe">
     <meta
       name="description"
       content="霄云海的网页小游戏合集，打开即玩。"
     >
     <title>游戏室 | 霄云海的博客</title>
+    <script>
+      (() => {
+        const themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
+        const lightThemeMedia = window.matchMedia("(prefers-color-scheme: light)");
+        const themeMeta = document.querySelector('meta[name="theme-color"]');
+
+        function getSavedTheme() {
+          try {
+            const item = JSON.parse(localStorage.getItem("theme"));
+            if (!item || Date.now() > item.expiry) return null;
+            return item.value === "dark" || item.value === "light"
+              ? item.value
+              : null;
+          } catch {
+            return null;
+          }
+        }
+
+        function resolveTheme() {
+          const savedTheme = getSavedTheme();
+          if (savedTheme) return savedTheme;
+          if (themeMedia.matches) return "dark";
+          if (lightThemeMedia.matches) return "light";
+
+          const hour = new Date().getHours();
+          return hour <= 6 || hour >= 18 ? "dark" : "light";
+        }
+
+        function applyTheme(theme) {
+          document.documentElement.dataset.theme = theme;
+          themeMeta.content = theme === "dark" ? "#18171d" : "#f7f9fe";
+        }
+
+        applyTheme(resolveTheme());
+        function handleSystemThemeChange() {
+          if (!getSavedTheme()) applyTheme(resolveTheme());
+        }
+
+        themeMedia.addEventListener("change", handleSystemThemeChange);
+        lightThemeMedia.addEventListener("change", handleSystemThemeChange);
+        window.addEventListener("storage", (event) => {
+          if (event.key === "theme") applyTheme(resolveTheme());
+        });
+      })();
+    </script>
     <style>
       :root {
         color-scheme: light;
         --paper: #f7f9fe;
         --surface: #ffffff;
-        --ink: #1f2d3d;
-        --muted: #687582;
-        --line: #e3e8f0;
-        --red: #ed4b4b;
-        --green: #25805f;
-        --cyan: #288d9a;
+        --ink: #363636;
+        --muted: rgba(60, 60, 67, 0.8);
+        --line: #e3e8f7;
+        --red: #d8213c;
+        --green: #57bd6a;
+        --cyan: #5ca1ff;
         --blue: #425aef;
-        --shadow: 0 12px 30px rgba(42, 39, 32, 0.1);
+        --header: rgba(247, 249, 254, 0.94);
+        --reaction-visual: #edf0f7;
+        --signal-ring: #ffffff;
+        --on-ink: #ffffff;
+        --shadow: 0 8px 16px -4px rgba(44, 45, 48, 0.08);
+        --shadow-hover: 0 12px 24px -8px rgba(66, 90, 239, 0.2);
+      }
+
+      [data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #18171d;
+        --surface: #1d1e22;
+        --ink: #f7f7fa;
+        --muted: #a1a2b8;
+        --line: #42444a;
+        --red: #ff3842;
+        --green: #57bd6a;
+        --cyan: #5ca1ff;
+        --blue: #f2b94b;
+        --header: rgba(29, 30, 34, 0.94);
+        --reaction-visual: #21232a;
+        --signal-ring: #30343f;
+        --on-ink: #18171d;
+        --shadow: 0 5px 20px rgba(28, 28, 28, 0.4);
+        --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.48);
       }
 
       * {
@@ -37,6 +106,9 @@
         font-family:
           Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
         letter-spacing: 0;
+        transition:
+          background-color 180ms ease,
+          color 180ms ease;
       }
 
       a {
@@ -48,7 +120,7 @@
         top: 0;
         z-index: 10;
         border-bottom: 1px solid var(--line);
-        background: rgba(247, 249, 254, 0.94);
+        background: var(--header);
         backdrop-filter: blur(14px);
       }
 
@@ -160,7 +232,7 @@
 
       .game-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 18px 38px rgba(42, 39, 32, 0.15);
+        box-shadow: var(--shadow-hover);
       }
 
       .game-card__link {
@@ -175,7 +247,7 @@
         place-items: center;
         overflow: hidden;
         border-bottom: 1px solid var(--line);
-        background: #dfece6;
+        background: var(--reaction-visual);
       }
 
       .game-card__visual--neon {
@@ -283,7 +355,7 @@
         aspect-ratio: 1;
         display: grid;
         place-items: center;
-        border: 16px solid #f7f4ed;
+        border: 16px solid var(--signal-ring);
         border-radius: 50%;
         background: var(--red);
         box-shadow:
@@ -357,7 +429,7 @@
         place-items: center;
         border-radius: 50%;
         background: var(--ink);
-        color: #fff;
+        color: var(--on-ink);
         font-size: 11px;
       }
 

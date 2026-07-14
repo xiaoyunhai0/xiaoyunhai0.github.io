@@ -65,10 +65,14 @@
     .actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 10px; }
     .actions button { flex: 1 1 150px; }
     .game-back {
-      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; color: var(--muted);
-      font-size: 12px; font-weight: 700; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 9px; margin-bottom: 24px; padding: 9px 13px;
+      border: 1px solid rgba(92,231,255,.42); border-radius: 4px; background: #0c1820;
+      color: #e9fbff; font-size: 12px; font-weight: 700; text-decoration: none;
+      transition: border-color .14s, background .14s, transform .14s;
     }
-    .game-back:hover { color: var(--cyan); }
+    .game-back:hover { border-color: var(--cyan); background: #102632; color: #fff; }
+    .game-back:active { transform: translateY(1px); }
+    .game-back:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
     .pause-copy { color: var(--muted); }
     .result-record { color: var(--muted); font-size: 12px; }
     .records {
@@ -127,7 +131,10 @@
 
   <section id="titleOverlay" class="overlay">
     <div class="panel title-panel">
-      <a class="game-back" href="../">← 返回游戏室</a>
+      <a class="game-back" href="../">
+        <span aria-hidden="true">←</span>
+        <span>返回游戏室</span>
+      </a>
       <div class="kicker">QUARANTINE CONTROL / 07</div>
       <h1>霓虹隔离区：撤离协议</h1>
       <p class="subtitle">NEON QUARANTINE: EXTRACTION PROTOCOL</p>
