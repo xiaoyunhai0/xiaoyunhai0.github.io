@@ -493,8 +493,6 @@
       
         <tags>
             
-            <tag> Addressables </tag>
-            
             <tag> Mirror </tag>
             
             <tag> Dissonance </tag>
@@ -502,6 +500,8 @@
             <tag> Guandan </tag>
             
             <tag> AI Commentary </tag>
+            
+            <tag> Addressables </tag>
             
         </tags>
       
@@ -831,6 +831,8 @@
       
         <tags>
             
+            <tag> Addressables </tag>
+            
             <tag> xLua </tag>
             
             <tag> 热更新 </tag>
@@ -842,8 +844,6 @@
             <tag> TMP </tag>
             
             <tag> IL2CPP </tag>
-            
-            <tag> Addressables </tag>
             
         </tags>
       

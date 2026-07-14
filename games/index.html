@@ -12,14 +12,15 @@
     <style>
       :root {
         color-scheme: light;
-        --paper: #f4f1eb;
-        --surface: #fffdf8;
-        --ink: #20211f;
-        --muted: #686961;
-        --line: #d8d5cc;
-        --red: #e84b3c;
-        --green: #177b57;
-        --cyan: #2f8992;
+        --paper: #f7f9fe;
+        --surface: #ffffff;
+        --ink: #1f2d3d;
+        --muted: #687582;
+        --line: #e3e8f0;
+        --red: #ed4b4b;
+        --green: #25805f;
+        --cyan: #288d9a;
+        --blue: #425aef;
         --shadow: 0 12px 30px rgba(42, 39, 32, 0.1);
       }
 
@@ -43,8 +44,12 @@
       }
 
       .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
         border-bottom: 1px solid var(--line);
-        background: rgba(244, 241, 235, 0.94);
+        background: rgba(247, 249, 254, 0.94);
+        backdrop-filter: blur(14px);
       }
 
       .site-header__inner {
@@ -67,26 +72,37 @@
         text-decoration: none;
       }
 
-      .brand__mark {
-        width: 30px;
-        height: 30px;
-        display: grid;
-        place-items: center;
-        border: 2px solid var(--ink);
-        border-radius: 6px;
-        background: var(--surface);
-        font-size: 17px;
+      .brand__avatar {
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        object-fit: cover;
       }
 
-      .back-link {
+      .site-nav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .site-nav a {
+        padding: 8px 11px;
+        border-radius: 6px;
         color: var(--muted);
         font-size: 14px;
         font-weight: 650;
         text-decoration: none;
       }
 
-      .back-link:hover {
+      .site-nav a:hover,
+      .site-nav a[aria-current="page"] {
+        background: var(--surface);
         color: var(--ink);
+      }
+
+      .site-nav a[aria-current="page"] {
+        box-shadow: inset 0 -2px var(--blue);
       }
 
       main {
@@ -102,7 +118,7 @@
 
       .eyebrow {
         margin: 0 0 12px;
-        color: var(--green);
+        color: var(--blue);
         font-size: 13px;
         font-weight: 800;
         text-transform: uppercase;
@@ -159,7 +175,106 @@
         place-items: center;
         overflow: hidden;
         border-bottom: 1px solid var(--line);
-        background: #dce7de;
+        background: #dfece6;
+      }
+
+      .game-card__visual--neon {
+        background: #071014;
+        color: #67e8f9;
+      }
+
+      .neon-grid {
+        position: absolute;
+        inset: 0;
+        opacity: 0.25;
+        background-image:
+          linear-gradient(rgba(103, 232, 249, 0.34) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(103, 232, 249, 0.34) 1px, transparent 1px);
+        background-size: 30px 30px;
+      }
+
+      .quarantine-map {
+        position: relative;
+        width: 174px;
+        height: 126px;
+        border: 2px solid currentColor;
+        border-radius: 6px;
+        background: #0d1b21;
+        box-shadow:
+          0 0 26px rgba(103, 232, 249, 0.22),
+          18px 16px 0 rgba(255, 105, 212, 0.1);
+      }
+
+      .quarantine-map::before,
+      .quarantine-map::after {
+        content: "";
+        position: absolute;
+        background: #26383d;
+      }
+
+      .quarantine-map::before {
+        left: 47px;
+        top: 0;
+        width: 18px;
+        height: 82px;
+      }
+
+      .quarantine-map::after {
+        right: 0;
+        bottom: 28px;
+        width: 92px;
+        height: 16px;
+      }
+
+      .relay,
+      .operator,
+      .extraction {
+        position: absolute;
+        z-index: 1;
+      }
+
+      .relay {
+        width: 12px;
+        height: 12px;
+        border: 2px solid #ffd166;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #ffd166;
+      }
+
+      .relay--one {
+        left: 20px;
+        top: 22px;
+      }
+
+      .relay--two {
+        right: 28px;
+        top: 28px;
+      }
+
+      .relay--three {
+        left: 79px;
+        bottom: 18px;
+      }
+
+      .operator {
+        left: 68px;
+        top: 49px;
+        width: 15px;
+        height: 15px;
+        transform: rotate(45deg);
+        border: 2px solid #fff;
+        background: var(--cyan);
+        box-shadow: 0 0 12px var(--cyan);
+      }
+
+      .extraction {
+        right: 13px;
+        bottom: 11px;
+        width: 34px;
+        height: 34px;
+        border: 2px dashed #71f6b3;
+        border-radius: 50%;
+        box-shadow: 0 0 12px rgba(113, 246, 179, 0.6);
       }
 
       .signal {
@@ -262,8 +377,12 @@
           width: min(100% - 28px, 1080px);
         }
 
-        .brand__text {
+        .site-nav__optional {
           display: none;
+        }
+
+        .site-nav a {
+          padding-inline: 9px;
         }
 
         main {
@@ -297,21 +416,57 @@
     <header class="site-header">
       <div class="site-header__inner">
         <a class="brand" href="/" aria-label="返回霄云海的博客">
-          <span class="brand__mark" aria-hidden="true">◆</span>
+          <img class="brand__avatar" src="/img/avatar.png" alt="">
           <span class="brand__text">霄云海的博客</span>
         </a>
-        <a class="back-link" href="/">← 返回博客</a>
+        <nav class="site-nav" aria-label="主导航">
+          <a class="site-nav__optional" href="/archives/">归档</a>
+          <a class="site-nav__optional" href="/categories/">分类</a>
+          <a class="site-nav__optional" href="/tags/">标签</a>
+          <a href="/games/" aria-current="page">游戏室</a>
+          <a class="site-nav__optional" href="/music/">音乐馆</a>
+        </nav>
       </div>
     </header>
 
     <main>
       <section class="intro" aria-labelledby="page-title">
-        <p class="eyebrow">Browser games</p>
+        <p class="eyebrow">Game archive / 02 titles</p>
         <h1 id="page-title">游戏室</h1>
         <p>不用下载，不用登录。挑一个小游戏，给大脑换个频道。</p>
       </section>
 
       <section class="game-grid" aria-label="游戏列表">
+        <article class="game-card">
+          <a class="game-card__link" href="./neon-quarantine/">
+            <div
+              class="game-card__visual game-card__visual--neon"
+              aria-hidden="true"
+            >
+              <div class="neon-grid"></div>
+              <div class="quarantine-map">
+                <span class="relay relay--one"></span>
+                <span class="relay relay--two"></span>
+                <span class="relay relay--three"></span>
+                <span class="operator"></span>
+                <span class="extraction"></span>
+              </div>
+            </div>
+            <div class="game-card__content">
+              <div class="game-card__meta">
+                <span>肉鸽射击</span>
+                <span>桌面端 · 键鼠</span>
+              </div>
+              <h2>霓虹隔离区：撤离协议</h2>
+              <p>激活三座能源中继站，突破封锁区并坚持到撤离信标解锁。</p>
+              <span class="play">
+                <span class="play__icon" aria-hidden="true">▶</span>
+                进入隔离区
+              </span>
+            </div>
+          </a>
+        </article>
+
         <article class="game-card">
           <a class="game-card__link" href="./reaction/">
             <div class="game-card__visual" aria-hidden="true">
