@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f2efe9">
+    <meta
+      name="description"
+      content="等待信号后立即点击，测试你的反应速度。"
+    >
+    <title>反应力挑战 | 游戏室</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f2efe9;
+        --surface: #fffdf8;
+        --ink: #20211f;
+        --muted: #6b6b64;
+        --line: #d7d3ca;
+        --red: #e64c3f;
+        --amber: #e9a23b;
+        --green: #16805a;
+        --cyan: #267f91;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        background: var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+        letter-spacing: 0;
+      }
+
+      button,
+      a {
+        font: inherit;
+      }
+
+      .topbar {
+        width: min(920px, calc(100% - 36px));
+        min-height: 68px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .icon-link,
+      .icon-button {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: var(--surface);
+        color: var(--ink);
+        cursor: pointer;
+        text-decoration: none;
+        transition:
+          transform 160ms ease,
+          border-color 160ms ease;
+      }
+
+      .icon-link:hover,
+      .icon-button:hover {
+        transform: translateY(-2px);
+        border-color: var(--ink);
+      }
+
+      .topbar__title {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      main {
+        width: min(920px, calc(100% - 36px));
+        margin: 0 auto;
+        padding: 24px 0 58px;
+      }
+
+      .scoreboard {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border: 1px solid var(--line);
+        border-bottom: 0;
+        border-radius: 8px 8px 0 0;
+        overflow: hidden;
+        background: var(--surface);
+      }
+
+      .score {
+        min-width: 0;
+        padding: 16px 18px;
+        border-right: 1px solid var(--line);
+      }
+
+      .score:last-child {
+        border-right: 0;
+      }
+
+      .score__label {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .score__value {
+        display: block;
+        overflow-wrap: anywhere;
+        font-size: 22px;
+        font-variant-numeric: tabular-nums;
+        font-weight: 850;
+      }
+
+      .stage {
+        position: relative;
+        width: 100%;
+        min-height: 430px;
+        aspect-ratio: 16 / 9;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        padding: 28px;
+        border: 1px solid var(--ink);
+        border-radius: 0 0 8px 8px;
+        background: #e6e2d8;
+        color: var(--ink);
+        cursor: pointer;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        transition:
+          background-color 120ms ease,
+          color 120ms ease;
+      }
+
+      .stage:focus-visible,
+      .icon-link:focus-visible,
+      .icon-button:focus-visible {
+        outline: 3px solid var(--cyan);
+        outline-offset: 3px;
+      }
+
+      .stage__pattern {
+        position: absolute;
+        inset: 0;
+        opacity: 0.2;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          110deg,
+          transparent 0 48px,
+          currentColor 49px 51px,
+          transparent 52px 86px
+        );
+      }
+
+      .stage__content {
+        position: relative;
+        z-index: 1;
+        max-width: 620px;
+        text-align: center;
+      }
+
+      .signal {
+        width: 104px;
+        aspect-ratio: 1;
+        margin: 0 auto 28px;
+        display: grid;
+        place-items: center;
+        border: 14px solid var(--surface);
+        border-radius: 50%;
+        background: var(--red);
+        box-shadow:
+          0 0 0 2px currentColor,
+          0 14px 0 rgba(32, 33, 31, 0.12);
+        transition:
+          transform 160ms ease,
+          background-color 120ms ease;
+      }
+
+      .signal::after {
+        content: "";
+        width: 24px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .stage:hover .signal {
+        transform: translateY(-3px);
+      }
+
+      .stage__status {
+        margin: 0;
+        font-size: 40px;
+        line-height: 1.15;
+        font-weight: 900;
+        letter-spacing: 0;
+      }
+
+      .stage__hint {
+        margin: 12px 0 0;
+        font-size: 16px;
+        line-height: 1.6;
+        font-weight: 650;
+      }
+
+      .stage[data-state="waiting"] {
+        background: #efc46e;
+      }
+
+      .stage[data-state="waiting"] .signal {
+        background: var(--amber);
+      }
+
+      .stage[data-state="ready"] {
+        background: var(--green);
+        color: #fff;
+      }
+
+      .stage[data-state="ready"] .signal {
+        background: #52e3a2;
+        transform: scale(1.08);
+      }
+
+      .stage[data-state="result"] {
+        background: #d6e9e5;
+      }
+
+      .stage[data-state="result"] .signal {
+        background: var(--cyan);
+      }
+
+      .stage[data-state="early"] {
+        background: #f2d8d2;
+      }
+
+      .stage[data-state="early"] .signal {
+        background: var(--red);
+      }
+
+      .history {
+        margin-top: 22px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .history__label {
+        flex: 0 0 auto;
+        font-weight: 750;
+      }
+
+      .history__list {
+        min-width: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .history__item {
+        padding: 5px 9px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        background: var(--surface);
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+      }
+
+      @media (max-width: 640px) {
+        .topbar,
+        main {
+          width: min(100% - 24px, 920px);
+        }
+
+        main {
+          padding-top: 10px;
+        }
+
+        .score {
+          padding: 12px 10px;
+        }
+
+        .score__value {
+          font-size: 18px;
+        }
+
+        .stage {
+          min-height: 430px;
+          aspect-ratio: auto;
+          padding: 24px 16px;
+        }
+
+        .stage__status {
+          font-size: 32px;
+        }
+
+        .stage__hint {
+          font-size: 14px;
+        }
+
+        .history {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="icon-link" href="../" title="返回游戏室" aria-label="返回游戏室">
+        <span aria-hidden="true">←</span>
+      </a>
+      <h1 class="topbar__title">反应力挑战</h1>
+      <button
+        class="icon-button"
+        id="reset-score"
+        type="button"
+        title="重置成绩"
+        aria-label="重置成绩"
+      >
+        <span aria-hidden="true">↻</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="scoreboard" aria-label="成绩">
+        <div class="score">
+          <span class="score__label">本次</span>
+          <strong class="score__value" id="current-score">—</strong>
+        </div>
+        <div class="score">
+          <span class="score__label">最佳</span>
+          <strong class="score__value" id="best-score">—</strong>
+        </div>
+        <div class="score">
+          <span class="score__label">平均</span>
+          <strong class="score__value" id="average-score">—</strong>
+        </div>
+      </section>
+
+      <button class="stage" id="reaction-stage" type="button" data-state="idle">
+        <span class="stage__pattern" aria-hidden="true"></span>
+        <span class="stage__content">
+          <span class="signal" aria-hidden="true"></span>
+          <span class="stage__status" id="stage-status">准备好了吗？</span>
+          <span class="stage__hint" id="stage-hint">点击开始</span>
+        </span>
+      </button>
+
+      <div class="history" aria-live="polite">
+        <span class="history__label">最近成绩</span>
+        <ol class="history__list" id="history-list">
+          <li class="history__item">暂无</li>
+        </ol>
+      </div>
+    </main>
+
+    <script>
+      (() => {
+        const storageKey = "blog-reaction-scores";
+        const stage = document.querySelector("#reaction-stage");
+        const status = document.querySelector("#stage-status");
+        const hint = document.querySelector("#stage-hint");
+        const currentScore = document.querySelector("#current-score");
+        const bestScore = document.querySelector("#best-score");
+        const averageScore = document.querySelector("#average-score");
+        const historyList = document.querySelector("#history-list");
+        const resetButton = document.querySelector("#reset-score");
+
+        let state = "idle";
+        let readyAt = 0;
+        let timerId = null;
+        let scores = loadScores();
+
+        function loadScores() {
+          try {
+            const stored = JSON.parse(localStorage.getItem(storageKey));
+            return Array.isArray(stored)
+              ? stored.filter(Number.isFinite).slice(0, 5)
+              : [];
+          } catch {
+            return [];
+          }
+        }
+
+        function saveScores() {
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(scores));
+          } catch {
+            // The game remains playable when browser storage is unavailable.
+          }
+        }
+
+        function formatScore(value) {
+          return Number.isFinite(value) ? `${value} ms` : "—";
+        }
+
+        function renderScores(latest) {
+          currentScore.textContent = formatScore(latest);
+          bestScore.textContent = formatScore(
+            scores.length ? Math.min(...scores) : Number.NaN,
+          );
+          averageScore.textContent = formatScore(
+            scores.length
+              ? Math.round(
+                  scores.reduce((total, score) => total + score, 0) /
+                    scores.length,
+                )
+              : Number.NaN,
+          );
+
+          historyList.replaceChildren();
+          if (!scores.length) {
+            const emptyItem = document.createElement("li");
+            emptyItem.className = "history__item";
+            emptyItem.textContent = "暂无";
+            historyList.append(emptyItem);
+            return;
+          }
+
+          scores.forEach((score) => {
+            const item = document.createElement("li");
+            item.className = "history__item";
+            item.textContent = formatScore(score);
+            historyList.append(item);
+          });
+        }
+
+        function setState(nextState, nextStatus, nextHint) {
+          state = nextState;
+          stage.dataset.state = nextState;
+          status.textContent = nextStatus;
+          hint.textContent = nextHint;
+        }
+
+        function startRound() {
+          window.clearTimeout(timerId);
+          setState("waiting", "等待信号…", "变绿之前不要点击");
+
+          const delay = 1600 + Math.random() * 2600;
+          timerId = window.setTimeout(() => {
+            readyAt = performance.now();
+            setState("ready", "现在点！", "越快越好");
+          }, delay);
+        }
+
+        function recordReaction() {
+          const reactionTime = Math.max(1, Math.round(performance.now() - readyAt));
+          scores.unshift(reactionTime);
+          scores = scores.slice(0, 5);
+          saveScores();
+          renderScores(reactionTime);
+          setState("result", `${reactionTime} ms`, "点击再来一次");
+        }
+
+        function handleStageClick() {
+          if (state === "waiting") {
+            window.clearTimeout(timerId);
+            setState("early", "太早了", "点击重新开始");
+            return;
+          }
+
+          if (state === "ready") {
+            recordReaction();
+            return;
+          }
+
+          startRound();
+        }
+
+        function resetScores() {
+          window.clearTimeout(timerId);
+          scores = [];
+          saveScores();
+          renderScores();
+          setState("idle", "准备好了吗？", "点击开始");
+          stage.focus();
+        }
+
+        stage.addEventListener("click", handleStageClick);
+        resetButton.addEventListener("click", resetScores);
+        renderScores();
+      })();
+    </script>
+  </body>
+</html>
