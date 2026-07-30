@@ -255,6 +255,74 @@
         color: #67e8f9;
       }
 
+      .game-card__visual--mine {
+        background: #d8d4cc;
+        color: #151515;
+      }
+
+      .mine-window {
+        width: min(210px, calc(100% - 44px));
+        border: 2px solid currentColor;
+        background: #ece9e1;
+        box-shadow: 5px 5px 0 #151515;
+      }
+
+      .mine-titlebar {
+        min-height: 34px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 8px;
+        border-bottom: 2px solid #0b1b3a;
+        background: #1646d8;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .mine-face {
+        width: 20px;
+        height: 20px;
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        border: 1px solid #151515;
+        border-radius: 50%;
+        background: #ffd91f;
+        color: #151515;
+        font: 800 11px/1 monospace;
+      }
+
+      .mine-board {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 2px;
+        padding: 14px;
+        background: #f7f4ed;
+      }
+
+      .mine-cell {
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        border-top: 3px solid #ffffff;
+        border-left: 3px solid #ffffff;
+        border-right: 3px solid #77746e;
+        border-bottom: 3px solid #77746e;
+        background: #d8d4cc;
+        color: #1646d8;
+        font: 900 15px/1 "Courier New", monospace;
+      }
+
+      .mine-cell--open {
+        border: 1px solid #9b978f;
+        background: #ece9e1;
+      }
+
+      .mine-cell--flag {
+        color: #e74832;
+      }
+
       .neon-grid {
         position: absolute;
         inset: 0;
@@ -503,12 +571,54 @@
 
     <main>
       <section class="intro" aria-labelledby="page-title">
-        <p class="eyebrow">Game archive / 02 titles</p>
+        <p class="eyebrow">Game archive / 03 titles</p>
         <h1 id="page-title">游戏室</h1>
         <p>不用下载，不用登录。挑一个小游戏，给大脑换个频道。</p>
       </section>
 
       <section class="game-grid" aria-label="游戏列表">
+        <article class="game-card">
+          <a class="game-card__link" href="./you-are-the-mine/">
+            <div
+              class="game-card__visual game-card__visual--mine"
+              aria-hidden="true"
+            >
+              <div class="mine-window">
+                <div class="mine-titlebar">
+                  <span class="mine-face">:)</span>
+                  <span>你才是雷</span>
+                </div>
+                <div class="mine-board">
+                  <span class="mine-cell"></span>
+                  <span class="mine-cell mine-cell--open">1</span>
+                  <span class="mine-cell mine-cell--open">2</span>
+                  <span class="mine-cell mine-cell--flag">⚑</span>
+                  <span class="mine-cell"></span>
+                  <span class="mine-cell"></span>
+                  <span class="mine-cell mine-cell--open"></span>
+                  <span class="mine-cell mine-cell--open">1</span>
+                  <span class="mine-cell"></span>
+                  <span class="mine-cell"></span>
+                  <span class="mine-cell mine-cell--open">2</span>
+                  <span class="mine-cell mine-cell--flag">⚑</span>
+                </div>
+              </div>
+            </div>
+            <div class="game-card__content">
+              <div class="game-card__meta">
+                <span>经典扫雷</span>
+                <span>桌面端 · 触屏</span>
+              </div>
+              <h2>你才是雷</h2>
+              <p>上传一张头像，把 TA 藏进雷区；支持多档难度、自定义棋盘和触屏长按插旗。</p>
+              <span class="play">
+                <span class="play__icon" aria-hidden="true">▶</span>
+                开始排雷
+              </span>
+            </div>
+          </a>
+        </article>
+
         <article class="game-card">
           <a class="game-card__link" href="./neon-quarantine/">
             <div
