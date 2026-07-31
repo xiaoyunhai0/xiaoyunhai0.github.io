@@ -323,6 +323,80 @@
         color: #e74832;
       }
 
+      .game-card__visual--road {
+        background: #091411;
+        color: #b9ff38;
+      }
+
+      .road-skyline {
+        position: absolute;
+        inset: 0;
+        opacity: 0.62;
+        background:
+          linear-gradient(165deg, transparent 42%, #122923 43% 57%, transparent 58%),
+          linear-gradient(195deg, transparent 48%, #18332d 49% 62%, transparent 63%);
+      }
+
+      .racing-road {
+        position: absolute;
+        left: 50%;
+        bottom: -88px;
+        width: 270px;
+        height: 260px;
+        transform: translateX(-50%) perspective(260px) rotateX(55deg);
+        border-inline: 8px solid #46e8ff;
+        background: #24302e;
+        box-shadow: 0 0 30px rgba(70, 232, 255, 0.24);
+      }
+
+      .racing-road::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        border-left: 5px dashed rgba(255, 255, 255, 0.72);
+      }
+
+      .racing-car {
+        position: relative;
+        z-index: 1;
+        width: 112px;
+        height: 52px;
+        transform: translateY(22px);
+        border: 2px solid #07100f;
+        border-radius: 48% 48% 18% 18%;
+        background: #b9ff38;
+        box-shadow:
+          0 16px 0 -10px #050807,
+          0 22px 28px rgba(0, 0, 0, 0.44);
+      }
+
+      .racing-car::before {
+        content: "";
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: -24px;
+        height: 30px;
+        border: 2px solid #07100f;
+        border-bottom: 0;
+        border-radius: 50% 50% 0 0;
+        background: #315d57;
+      }
+
+      .racing-car::after {
+        content: "";
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        bottom: 7px;
+        height: 8px;
+        border-radius: 2px;
+        background: #ff4667;
+        box-shadow: 0 0 12px rgba(255, 70, 103, 0.8);
+      }
+
       .neon-grid {
         position: absolute;
         inset: 0;
@@ -571,12 +645,37 @@
 
     <main>
       <section class="intro" aria-labelledby="page-title">
-        <p class="eyebrow">Game archive / 03 titles</p>
+        <p class="eyebrow">Game archive / 04 titles</p>
         <h1 id="page-title">游戏室</h1>
         <p>不用下载，不用登录。挑一个小游戏，给大脑换个频道。</p>
       </section>
 
       <section class="game-grid" aria-label="游戏列表">
+        <article class="game-card">
+          <a class="game-card__link" href="./open-road-racing/">
+            <div
+              class="game-card__visual game-card__visual--road"
+              aria-hidden="true"
+            >
+              <div class="road-skyline"></div>
+              <div class="racing-road"></div>
+              <div class="racing-car"></div>
+            </div>
+            <div class="game-card__content">
+              <div class="game-card__meta">
+                <span>3D 开放公路</span>
+                <span>键鼠 · 触屏 · 手柄</span>
+              </div>
+              <h2>极境狂飙</h2>
+              <p>驾驶、漂移并挑战多种赛事，在海岸、荒漠和山路之间扩充车库。</p>
+              <span class="play">
+                <span class="play__icon" aria-hidden="true">▶</span>
+                驶入开放公路
+              </span>
+            </div>
+          </a>
+        </article>
+
         <article class="game-card">
           <a class="game-card__link" href="./you-are-the-mine/">
             <div
