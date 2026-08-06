@@ -1115,7 +1115,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const lazyloadImg = () => {
     window.lazyLoadInstance = new LazyLoad({
       elements_selector: "img",
-      threshold: 0,
+      threshold: 1000,
       data_src: "lazy-src",
     });
   };
