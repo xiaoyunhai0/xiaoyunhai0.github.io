@@ -756,19 +756,22 @@ const anzhiyu = {
     return null;
   },
   // 获取并缓存本地音乐列表
-  getCustomMusicList: async function () {
+  getCustomMusicList: async function (playlist = musicPagePlaylists[musicPagePlaylistIndex]) {
     const currentTime = new Date().getTime();
-    const cacheData = JSON.parse(localStorage.getItem("musicData")) || { timestamp: 0 };
+    const cacheKey = `musicData:${playlist.url}`;
+    const cacheData = JSON.parse(localStorage.getItem(cacheKey)) || { timestamp: 0 };
 
     if (currentTime - cacheData.timestamp < 24 * 60 * 60 * 1000 && cacheData.songs) {
       return cacheData.songs;
     }
 
-    const response = await fetch("/json/music.json");
+    const response = await fetch(playlist.url);
+    if (!response.ok) throw new Error(`Failed to load playlist: ${playlist.url}`);
     const songs = await response.json();
+    if (!Array.isArray(songs)) throw new Error(`Invalid playlist: ${playlist.url}`);
     cacheData.timestamp = currentTime;
     cacheData.songs = songs;
-    localStorage.setItem("musicData", JSON.stringify(cacheData));
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
     return songs;
   },
   // 使用本地 JSON 初始化音乐页播放器
@@ -789,8 +792,6 @@ const anzhiyu = {
       listMaxHeight: "calc(100vh - 169px)!important",
       lrcType: 0,
     });
-    changeMusicListFlag = true;
-    defaultPlayMusicList = songs;
     anzhiyu.changeMusicBg(false);
   },
   // 将音乐缓存播放
@@ -936,20 +937,14 @@ const anzhiyu = {
 
     // 监听增加单曲按钮
     anMusicBtnGetSong.addEventListener("click", () => {
-      if (changeMusicListFlag) {
-        const metingAplayer = anzhiyu.getMusicPageAplayer();
-        if (!metingAplayer) return;
+      const metingAplayer = anzhiyu.getMusicPageAplayer();
+      if (!metingAplayer || !metingAplayer.list.audios.length) return;
 
-        const allAudios = metingAplayer.list.audios;
-        const randomIndex = Math.floor(Math.random() * allAudios.length);
-        // 随机播放一首
-        metingAplayer.list.switch(randomIndex);
-      } else {
-        anzhiyu.cacheAndPlayMusic();
-      }
+      const randomIndex = Math.floor(Math.random() * metingAplayer.list.audios.length);
+      metingAplayer.list.switch(randomIndex);
     });
     anMusicRefreshBtn.addEventListener("click", () => {
-      localStorage.removeItem("musicData");
+      localStorage.removeItem(`musicData:${musicPagePlaylists[musicPagePlaylistIndex].url}`);
       anzhiyu.snackbarShow("已移除相关缓存歌曲");
     });
     anMusicSwitchingBtn.addEventListener("click", () => {
@@ -1000,22 +995,20 @@ const anzhiyu = {
     const metingAplayer = anzhiyu.getMusicPageAplayer();
     if (!metingAplayer) return;
 
-    let songs = [];
-
-    if (changeMusicListFlag) {
-      songs = defaultPlayMusicList;
-    } else {
-      // 保存当前默认播放列表，以使下次可以切换回来
-      defaultPlayMusicList = metingAplayer.list.audios;
-      songs = await anzhiyu.getCustomMusicList();
+    const nextIndex = (musicPagePlaylistIndex + 1) % musicPagePlaylists.length;
+    const nextPlaylist = musicPagePlaylists[nextIndex];
+    const songs = await anzhiyu.getCustomMusicList(nextPlaylist);
+    if (!songs.length) {
+      anzhiyu.snackbarShow(`${nextPlaylist.name}歌单暂无歌曲`);
+      return;
     }
 
     // 清除当前播放列表并添加新的歌曲
     metingAplayer.list.clear();
     metingAplayer.list.add(songs);
-
-    // 切换标志位
-    changeMusicListFlag = !changeMusicListFlag;
+    musicPagePlaylistIndex = nextIndex;
+    selectRandomSong = [];
+    anzhiyu.snackbarShow(`已切换到${nextPlaylist.name}歌单`);
   },
   // 控制台音乐列表监听
   addEventListenerConsoleMusicList: function () {
