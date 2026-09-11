@@ -7880,7 +7880,8 @@ body:has(#console.show) #nav-music {
   height: 50px;
   bottom: 100px;
   padding: 5px;
-  background: var(--anzhiyu-white-op);
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.35);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 50%;
