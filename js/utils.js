@@ -761,7 +761,7 @@ const anzhiyu = {
     const cacheKey = `musicData:${playlist.url}`;
     const cacheData = JSON.parse(localStorage.getItem(cacheKey)) || { timestamp: 0 };
 
-    if (currentTime - cacheData.timestamp < 24 * 60 * 60 * 1000 && cacheData.songs) {
+    if (currentTime - cacheData.timestamp < 24 * 60 * 60 * 1000 && cacheData.songs?.length) {
       return cacheData.songs;
     }
 
@@ -771,7 +771,7 @@ const anzhiyu = {
     if (!Array.isArray(songs)) throw new Error(`Invalid playlist: ${playlist.url}`);
     cacheData.timestamp = currentTime;
     cacheData.songs = songs;
-    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+    if (songs.length) localStorage.setItem(cacheKey, JSON.stringify(cacheData));
     return songs;
   },
   // 使用本地 JSON 初始化音乐页播放器
