@@ -260,6 +260,16 @@
         color: #151515;
       }
 
+      .game-card__visual--microvoyage {
+        background: #e9e2f3;
+        color: #986273;
+      }
+
+      .microvoyage-cells {
+        width: 240px;
+        height: 200px;
+      }
+
       .mine-window {
         width: min(210px, calc(100% - 44px));
         border: 2px solid currentColor;
@@ -645,12 +655,48 @@
 
     <main>
       <section class="intro" aria-labelledby="page-title">
-        <p class="eyebrow">Game archive / 04 titles</p>
+        <p class="eyebrow">Game archive / 05 titles</p>
         <h1 id="page-title">游戏室</h1>
         <p>不用下载，不用登录。挑一个小游戏，给大脑换个频道。</p>
       </section>
 
       <section class="game-grid" aria-label="游戏列表">
+        <article class="game-card">
+          <a class="game-card__link" href="./microvoyage/">
+            <div
+              class="game-card__visual game-card__visual--microvoyage"
+              aria-hidden="true"
+            >
+              <svg class="microvoyage-cells" viewBox="0 0 240 200" fill="none">
+                <g fill="#c9788c" fill-opacity="0.22" stroke="currentColor" stroke-width="2">
+                  <circle cx="112" cy="100" r="65"></circle>
+                  <circle cx="112" cy="100" r="25"></circle>
+                  <circle cx="210" cy="42" r="26"></circle>
+                  <circle cx="32" cy="162" r="20"></circle>
+                </g>
+                <g fill="currentColor">
+                  <circle cx="112" cy="100" r="9"></circle>
+                  <circle cx="210" cy="42" r="8"></circle>
+                  <circle cx="32" cy="162" r="6"></circle>
+                </g>
+                <path d="M28 32h22M39 21v22M194 156h22M205 145v22" stroke="currentColor" stroke-width="2"></path>
+              </svg>
+            </div>
+            <div class="game-card__content">
+              <div class="game-card__meta">
+                <span>3D 微观探索</span>
+                <span>键鼠 · 触屏</span>
+              </div>
+              <h2>Micro Voyage · 微观之旅</h2>
+              <p>自由移动、飞行与缩放，从日常尺度一路探索到细胞世界。</p>
+              <span class="play">
+                <span class="play__icon" aria-hidden="true">▶</span>
+                开始微观之旅
+              </span>
+            </div>
+          </a>
+        </article>
+
         <article class="game-card">
           <a class="game-card__link" href="./open-road-racing/">
             <div
