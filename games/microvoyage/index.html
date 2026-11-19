@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="description" content="Micro Voyage: shrink from human size down to the world of cells.">
+<meta name="description" content="微观之旅：从日常尺度不断缩小，探索细胞中的奇妙世界。">
 <meta name="theme-color" content="#f3ece8">
 <link rel="icon" href="data:,">
-<title>Micro Voyage</title>
+<title>微观之旅 · Micro Voyage</title>
 <style>
   html,body{margin:0;height:100%;overflow:hidden;background:#f3ece8;font-family:"Segoe UI",system-ui,sans-serif;color:#fff;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;touch-action:none}
   #view{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
@@ -67,35 +67,35 @@
 </head>
 <body>
 <a class="room-link" href="../" lang="zh-CN">← 返回游戏室</a>
-<canvas id="view" role="img" aria-label="Micro Voyage 3D exploration"></canvas>
+<canvas id="view" role="img" aria-label="微观之旅 3D 探索画面"></canvas>
 <div id="scale" class="panel"><div id="size">—</div></div>
 <div id="gauge" class="panel"><div id="bar"></div>
   <span>×1</span><span>×1/100</span><span>×1/10⁴</span><span>×1/10⁶</span><span>×1/10⁸</span><span>×1/10¹⁰</span><span>×1/10¹²</span></div>
 <div id="help" class="panel">
-  <div class="k"><b>Mouse</b>click the view, then move to look around</div>
-  <div class="k"><b>W A S D</b>move · <b class="inline-key">Shift</b> faster</div>
-  <div class="k"><b>Space / C</b>take off, rise / sink, land</div>
-  <div class="k"><b>Wheel / Q E</b>shrink / grow</div>
-  <div class="k"><b>T</b>say hello (cell worlds)</div>
-  <div class="k"><b>R / H</b>reset / hide this help</div>
-  <div class="t"><b>Left thumb</b>move</div>
-  <div class="t"><b>Right thumb</b>look around</div>
-  <div class="t"><b>Pinch / − +</b>shrink / grow</div>
-  <div class="t"><b>▲ ▼</b>take off, rise / sink, land</div>
+  <div class="k"><b>鼠标</b>点击画面后移动鼠标，环顾四周</div>
+  <div class="k"><b>W A S D</b>移动 · <b class="inline-key">Shift</b> 加速</div>
+  <div class="k"><b>空格 / C</b>起飞、上升 / 下降、着陆</div>
+  <div class="k"><b>滚轮 / Q E</b>缩小 / 放大</div>
+  <div class="k"><b>T</b>向细胞世界的居民打招呼</div>
+  <div class="k"><b>R / H</b>重置 / 显示或隐藏帮助</div>
+  <div class="t"><b>左手拖动</b>移动</div>
+  <div class="t"><b>右手拖动</b>转动视角</div>
+  <div class="t"><b>双指 / − +</b>缩小 / 放大</div>
+  <div class="t"><b>▲ ▼</b>起飞、上升 / 下降、着陆</div>
 </div>
 <div id="touch">
   <div id="stick"><div id="knob"></div></div>
   <div id="pad">
-    <button type="button" data-hold="grow" aria-label="Grow">+<small>Grow</small></button><button type="button" data-hold="up" aria-label="Rise">▲</button>
-    <button type="button" data-hold="shrink" aria-label="Shrink">−<small>Shrink</small></button><button type="button" data-hold="down" aria-label="Sink">▼</button>
+    <button type="button" data-hold="grow" aria-label="放大">+<small>放大</small></button><button type="button" data-hold="up" aria-label="上升">▲</button>
+    <button type="button" data-hold="shrink" aria-label="缩小">−<small>缩小</small></button><button type="button" data-hold="down" aria-label="下降">▼</button>
   </div>
-  <div id="menu"><button type="button" data-tap="fast">Fast</button><button type="button" data-tap="greet">Hello</button><button type="button" data-tap="reset">Reset</button><button type="button" data-tap="full">Full</button><button type="button" data-tap="help" aria-label="Toggle help">?</button></div>
+  <div id="menu"><button type="button" data-tap="fast">加速</button><button type="button" data-tap="greet">招呼</button><button type="button" data-tap="reset">重置</button><button type="button" data-tap="full">全屏</button><button type="button" data-tap="help" aria-label="显示或隐藏帮助">帮助</button></div>
 </div>
 <div id="fps" class="panel"></div>
-<div id="slow" class="panel hidden"><span id="slowmsg"></span><small id="slowgpu"></small><small>Click to hide</small></div>
-<div id="loading"><h1>Micro Voyage</h1><div id="ltrack"><div id="lbar"></div></div><div id="ltext">Preparing…</div></div>
-<div id="credits">Micro Voyage · <a href="https://dry-scene-27f6.site2019.workers.dev/" target="_blank" rel="noopener noreferrer">原始页面</a></div>
+<div id="slow" class="panel hidden"><span id="slowmsg"></span><small id="slowgpu"></small><small>点击收起提示</small></div>
+<div id="loading"><h1>微观之旅</h1><div id="ltrack"><div id="lbar"></div></div><div id="ltext">正在准备旅程…</div></div>
+<div id="credits">微观之旅 · <a href="https://dry-scene-27f6.site2019.workers.dev/" target="_blank" rel="noopener noreferrer">原始页面</a></div>
 <script>window.__ASSETS={"glb":["assets/heroine.5bb3372094.glb.gz"],"feet":["assets/feet.d75c9d053c.bin.gz"]}</script>
-<script type="module" src="./assets/game.cbe49336a7.js"></script>
+<script type="module" src="./assets/game.zh-CN.js"></script>
 </body>
 </html>

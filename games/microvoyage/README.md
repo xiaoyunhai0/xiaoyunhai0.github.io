@@ -2,7 +2,7 @@
 
 游戏入口：`/games/microvoyage/`。
 
-从用户提供的 `imports/MicroVoyage_public_source.zip` 中导入 `site/` 静态网页，保留原有游戏脚本、模型和 Three.js 模块。博客适配仅增加游戏室入口、返回链接和来源链接，并移除压缩包中不存在的备用模型路径。
+从用户提供的 `imports/MicroVoyage_public_source.zip` 中导入 `site/` 静态网页。博客适配包括游戏室入口、返回链接、来源链接和简体中文界面，并移除压缩包中不存在的备用模型路径。`assets/game.zh-CN.js` 基于原始脚本汉化加载提示、居民对白、世界名称和状态文本；保留原有游戏逻辑、模型和 Three.js 模块。
 
 来源：https://dry-scene-27f6.site2019.workers.dev/
 
